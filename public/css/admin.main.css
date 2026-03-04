@@ -1,0 +1,291 @@
+/* ===============================
+   WRAPPER FORM
+================================ */
+.wg-box {
+    background: #ffffff;
+    padding: 32px 40px;
+    border-radius: 16px;
+    max-width: 100%;
+}
+
+/* ===============================
+   FIELDSET LAYOUT (LABEL KIRI)
+================================ */
+.form-new-product fieldset {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.form-new-product .body-title {
+    min-width: 200px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ===============================
+   INPUT & SELECT
+================================ */
+.form-new-product input[type="text"],
+.form-new-product select {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 15px;
+    background: #fff;
+}
+
+.form-new-product input::placeholder {
+    color: #9ca3af;
+}
+
+.form-new-product input:focus,
+.form-new-product select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+}
+
+/* ===============================
+   UPLOAD IMAGE (FIX TAMPILAN)
+================================ */
+.upload-image {
+    width: 100%;
+}
+
+.upload-image .item {
+    width: 100%;
+}
+
+/* upload box */
+.uploadfile {
+    width: 100%;
+    height: 220px;
+    border: 2px dashed #3b82f6;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.uploadfile:hover {
+    background: #f8fafc;
+}
+
+.uploadfile input {
+    display: none;
+}
+
+.uploadfile .icon {
+    font-size: 42px;
+    color: #3b82f6;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.uploadfile .body-text {
+    text-align: center;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+/* ===============================
+   IMAGE PREVIEW
+================================ */
+#imgpreview {
+    width: 100%;
+    height: 220px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+#imgpreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ===============================
+   BUTTON
+================================ */
+.bot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 40px;
+}
+
+.tf-button {
+    height: 48px;
+    padding: 0 48px;
+    border-radius: 12px;
+    background: #2563eb;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.tf-button:hover {
+    background: #1e40af;
+}
+
+/* ===============================
+   ERROR MESSAGE
+================================ */
+.alert-danger {
+    margin-left: 200px;
+    margin-top: -12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    padding: 6px 12px;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+    .form-new-product fieldset {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-new-product .body-title {
+        min-width: unset;
+    }
+
+    .alert-danger {
+        margin-left: 0;
+    }
+}
+
+
+.about-img-wrapper {
+    width: 100%;
+    max-width: 420px;      /* ukuran visual tetap */
+    height: 520px;         /* tinggi layout tetap */
+    margin: auto;
+    overflow: hidden;
+    background-color: #f2f2f2;
+    border-radius: 12px;
+}
+
+.about-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* gambar MENYESUAIKAN */
+    object-position: center;
+}
+
+/* ===============================
+   FIX SIDEBAR & TOPBAR TANPA UBAH SCROLL BODY
+================================= */
+
+/* sidebar tetap di kiri */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+/* geser content mengikuti sidebar */
+#content-wrapper {
+    margin-left: 224px; /* lebar sidebar default SB Admin */
+}
+
+/* topbar tetap di atas */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: #fff;
+}
+
+
+/* =========================
+   SIDEBAR FIXED
+========================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+/* =========================
+   TOPBAR FIXED (TIDAK SCROLL)
+========================= */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 224px; /* lebar sidebar SB Admin */
+    right: 0;
+    z-index: 999;
+    background: #fff;
+}
+
+/* =========================
+   CONTENT POSISI NORMAL
+========================= */
+#content-wrapper {
+    margin-left: 224px;
+}
+
+
+/* =========================
+   SIDEBAR SCROLL SENDIRI
+========================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 224px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Scroll halus */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+
+#content {
+    margin-top: 70px; /* tinggi topbar */
+}
+
+
+/* =========================
+   SIDEBAR SCROLL SENDIRI
+========================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 224px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Scroll halus */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}

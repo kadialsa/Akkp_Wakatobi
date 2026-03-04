@@ -1,0 +1,776 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\About;
+use App\Models\Akreditasi;
+use App\Models\Berita;
+use App\Models\ContactMessage;
+use App\Models\Cooperation;
+use App\Models\HeaderSetting;
+use App\Models\Leader;
+use App\Models\Section;
+use App\Models\Sejarah;
+use Illuminate\Http\Request;
+use App\Models\Sliders;
+use App\Models\StrukturOrganisasi;
+use App\Models\Tupoksi;
+use App\Models\Video;
+use App\Models\VisiMisi;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\DB;
+
+class AdminController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $cooperations = Cooperation::where('is_active', 1)
+            ->orderBy('position')
+            ->get();
+
+        $sliders = Sliders::where('is_active', 1)->orderBy('position')->get();
+        $about = About::first();
+        $akreditasi = Akreditasi::orderBy('type')->get();
+
+        // Ambil data bulan ini
+        $visitorRaw = DB::table('visitors')
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->groupBy('date')
+            ->pluck('count', 'date');
+
+        // Buat 1 bulan penuh
+        $daysInMonth = Carbon::now()->daysInMonth;
+
+        // Buat array 1 bulan penuh
+        $visitors = [];
+
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+
+            $date = Carbon::now()->format('Y-m-') . str_pad($i, 2, '0', STR_PAD_LEFT);
+
+            $visitors[$i] = $visitorRaw[$date] ?? 0;
+        }
+
+        // Jumlah pengunjung
+        $visitorCount = DB::table('visitors')->count();
+
+        // Jumlah pesan belum dibaca
+        $unreadMessages = DB::table('contact_messages')
+            ->where('is_read', false)
+            ->count();
+
+        // Jumlah semua pesan
+        $messageCount = DB::table('contact_messages')->count();
+
+        // Jumlah berita
+        $newsCount = Berita::count();
+
+        // Data grafik 7 hari terakhir
+        $visitorDataRaw = DB::table('visitors')
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->orderBy('date', 'asc')
+            ->take(7)
+            ->get();
+
+        $visitorData = [
+            'dates' => $visitorDataRaw->pluck('date')->toArray(),
+            'counts' => $visitorDataRaw->pluck('count')->toArray()
+        ];
+
+        return view('admin.index', compact(
+            'cooperations',
+            'sliders',
+            'about',
+            'daysInMonth',
+            'visitors',
+            'visitorRaw', //<-- baru
+            'akreditasi',
+            'visitorCount',
+            'messageCount',
+            'unreadMessages', // <-- gunakan ini
+            'newsCount',
+            'visitorData'
+        ));
+    }
+
+    public function aboutEdit()
+    {
+
+        $about = About::first(); // Ambil data pertama
+        return view('admin.about', compact('about'));
+    }
+
+    public function aboutUpdate(Request $request, $id)
+    {
+        $about = About::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+        ]);
+
+        $data = $request->only(['name', 'title', 'description']);
+
+        // upload gambar jika ada
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/about'), $imageName);
+
+            $data['image'] = $imageName;
+        }
+
+        $about->update($data);
+
+        return redirect()->back()->with('success', 'Data About berhasil diperbarui');
+    }
+
+    // Kerjasama
+    public function coperation_index()
+    {
+        $items = Cooperation::orderBy('position')->get();
+        return view('admin.cooperation', compact('items'));
+    }
+
+    public function cooperation_create()
+    {
+        return view('admin.cooperation-add');
+    }
+
+    public function cooperation_store(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
+        ]);
+
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('uploads/cooperation'), $imageName);
+
+        Cooperation::create([
+            'image' => $imageName,
+            'position' => $request->position ?? 0,
+            'is_active' => $request->is_active ?? 1,
+        ]);
+
+        return redirect()->route('admin.cooperation.index')
+            ->with('success', 'Data berhasil ditambahkan');
+    }
+
+    public function cooperation_edit(Cooperation $cooperation)
+    {
+        return view('admin.cooperation-edit', compact('cooperation'));
+    }
+
+    public function cooperation_update(Request $request, Cooperation $cooperation)
+    {
+        if ($request->hasFile('image')) {
+            if ($cooperation->image && file_exists(public_path('uploads/cooperation/' . $cooperation->image))) {
+                unlink(public_path('uploads/cooperation/' . $cooperation->image));
+            }
+
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads/cooperation'), $imageName);
+
+            // ⬅️ SIMPAN KE MODEL
+            $cooperation->image = $imageName;
+        }
+
+        $cooperation->position = $request->position;
+        $cooperation->is_active = $request->is_active;
+        $cooperation->save(); // ⬅️ PENTING
+
+        return redirect()->route('admin.cooperation.index')
+            ->with('success', 'Data berhasil diupdate');
+    }
+
+
+    public function cooperation_destroy(Cooperation $cooperation)
+    {
+        @unlink(public_path('uploads/cooperation/' . $cooperation->image));
+        $cooperation->delete();
+
+        return back()->with('success', 'Data berhasil dihapus');
+    }
+
+    // Visi Misi
+    public function visiMisiEdit()
+    {
+        $visimisi = VisiMisi::firstOrCreate(
+            [], // kondisi kosong = ambil data pertama
+            [
+                'visi' => '',
+                'misi' => '',
+            ]
+        );
+
+        return view('admin.VisiMisi', compact('visimisi'));
+    }
+
+    public function visiMisiUpdate(Request $request)
+    {
+        $request->validate([
+            'visi' => 'required',
+            'misi' => 'required|array',
+        ]);
+
+        $visimisi = VisiMisi::firstOrFail();
+
+        // Gabungkan misi array menjadi text
+        $misiText = implode("\n", $request->misi);
+
+        $visimisi->update([
+            'visi' => $request->visi,
+            'misi' => $misiText,
+        ]);
+
+        return back()->with('success', 'Visi & Misi berhasil diperbaruhi!!');
+    }
+
+    // sejarah
+    public function sejarahEdit()
+    {
+        $sejarah = Sejarah::first();
+        return view('admin.sejarah', compact('sejarah'));
+    }
+
+    public function sejarahUpdate(Request $request)
+    {
+        $sejarah = Sejarah::firstOrFail(); // ⬅️ AMBIL YANG SUDAH ADA
+
+        $request->validate([
+            'sejarah' => 'required',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // upload foto
+        if ($request->hasFile('foto')) {
+
+            if ($sejarah->foto && file_exists(public_path('uploads/sejarah/' . $sejarah->foto))) {
+                unlink(public_path('uploads/sejarah/' . $sejarah->foto));
+            }
+
+            $filename = time() . '.' . $request->foto->extension();
+            $request->foto->move(public_path('uploads/sejarah'), $filename);
+            $sejarah->foto = $filename;
+        }
+
+        // UPDATE DATA LAMA
+        $sejarah->sejarah = $request->sejarah;
+        $sejarah->save();
+
+        return back()->with('success', 'Sejarah berhasil diperbarui');
+    }
+
+    // Tugas Pokok Dan Fungsi
+    public function tupoksiEdit()
+    {
+        $tupoksi = Tupoksi::first();
+        return view('admin.tupoksi', compact('tupoksi'));
+    }
+
+    // update
+    public function tupoksiUpdate(Request $request)
+    {
+        $tupoksi = Tupoksi::firstOrFail();
+
+        $request->validate([
+            'tugas_pokok' => 'required',
+            'fungsi' => 'required|array', // validasi sebagai array
+            'fungsi.*' => 'required|string', // setiap item wajib diisi
+        ]);
+
+        // simpan sebagai newline-separated string
+        $fungsiText = implode("\n", $request->fungsi);
+
+        $tupoksi->update([
+            'tugas_pokok' => $request->tugas_pokok,
+            'fungsi' => $fungsiText,
+        ]);
+
+        return back()->with('success', 'Tugas Pokok & Fungsi berhasil diperbarui');
+    }
+
+    // StrukturOrganisasi
+    public function strukturEdit()
+    {
+        $struktur = StrukturOrganisasi::first();
+        return view('admin.StrukturOrganisasi', compact('struktur'));
+    }
+
+    public function strukturUpdate(Request $request)
+    {
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
+        ]);
+
+        // ambil data pertama, jika tidak ada return error
+        $struktur = StrukturOrganisasi::first();
+        if (!$struktur) {
+            return back()->with('error', 'Data struktur organisasi belum tersedia.');
+            // atau bisa redirect ke halaman lain sesuai kebutuhan
+        }
+
+        if ($request->hasFile('image')) {
+
+            // hapus gambar lama jika ada
+            if ($struktur->image && file_exists(public_path('uploads/struktur/' . $struktur->image))) {
+                unlink(public_path('uploads/struktur/' . $struktur->image));
+            }
+
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads/struktur'), $imageName);
+
+            $struktur->image = $imageName;
+        }
+
+        $struktur->save(); // update data
+
+        return back()->with('success', 'Struktur organisasi berhasil diperbarui');
+    }
+
+    public function section_index()
+    {
+        $sections = Section::with('leaders')->get();
+        return view('admin.sections.index', compact('sections'));
+    }
+
+    public function section_create()
+    {
+        return view('admin.sections.create');
+    }
+
+    public function section_store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        Section::create([
+            'title' => $request->title
+        ]);
+
+        return redirect()->route('admin.sections.index')
+            ->with('success', 'Section berhasil ditambahkan');
+    }
+
+
+    public function section_edit(Section $section)
+    {
+        return view('admin.sections.edit', compact('section'));
+    }
+
+    public function section_update(Request $request, Section $section)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $section->update([
+            'title' => $request->title
+        ]);
+
+        return redirect()->route('admin.sections.index')
+            ->with('success', 'Section berhasil diperbarui');
+    }
+
+
+    public function section_destroy(Section $section)
+    {
+        $section->delete();
+
+        return redirect()->route('admin.sections.index')
+            ->with('success', 'Section berhasil dihapus');
+    }
+
+    // leader
+
+    public function leader_create(Section $section)
+    {
+        return view('admin.sections.leader-create', compact('section'));
+    }
+
+    public function leader_Store(Request $request)
+    {
+        $request->validate([
+            'section_id' => 'required|exists:sections,id',
+            'position' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'degree' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
+        ]);
+
+        $imageName = null;
+
+        if ($request->hasFile('photo')) {
+            $imageName = time() . '.' . $request->photo->extension();
+            $request->photo->move(public_path('uploads/leaders'), $imageName);
+        }
+
+
+        Leader::create([
+            'section_id' => $request->section_id,
+            'position' => $request->position,
+            'name' => $request->name,
+            'degree' => $request->degree,
+            'photo' => $imageName
+        ]);
+
+        return redirect()->route('admin.section.index')
+            ->with('success', 'Data berhasil ditambahkan');
+    }
+
+    public function leader_edit(Leader $leader)
+    {
+        return view('admin.sections.leader-edit', compact('leader'));
+    }
+
+
+    public function leader_update(Request $request, Leader $leader)
+    {
+        $request->validate([
+            'position' => 'required|string|max:255',
+            'name'     => 'required|string|max:255',
+            'degree'   => 'nullable|string|max:255',
+            'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:ratio=4/5'
+        ], [
+            'position.required' => 'Jabatan wajib diisi.',
+            'name.required'     => 'Nama wajib diisi.',
+            'photo.image'       => 'File harus berupa gambar.',
+            'photo.mimes'       => 'Format gambar harus JPG atau PNG.',
+            'photo.max'         => 'Ukuran gambar maksimal 2MB.',
+            'photo.dimensions'  => 'Gambar harus memiliki rasio 4:5 (contoh 840x1040).'
+        ]);
+
+        // Update text data
+        $leader->position = $request->position;
+        $leader->name     = $request->name;
+        $leader->degree   = $request->degree;
+
+        // Jika ada foto baru
+        if ($request->hasFile('photo')) {
+
+            // Hapus foto lama jika ada
+            if ($leader->photo && File::exists(public_path('uploads/leaders/' . $leader->photo))) {
+                File::delete(public_path('uploads/leaders/' . $leader->photo));
+            }
+
+            // Simpan foto baru
+            $file = $request->file('photo');
+            $imageName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/leaders'), $imageName);
+
+            $leader->photo = $imageName;
+        }
+
+        $leader->save();
+
+        return redirect()
+            ->route('admin.section.index')
+            ->with('success', 'Data pimpinan berhasil diperbarui.');
+    }
+
+
+    public function leader_destroy(Leader $leader)
+    {
+        // Hapus foto jika ada
+        if ($leader->photo && File::exists(public_path('uploads/leaders/' . $leader->photo))) {
+            File::delete(public_path('uploads/leaders/' . $leader->photo));
+        }
+
+        $leader->delete();
+
+        return redirect()
+            ->route('admin.section.index')
+            ->with('success', 'Data pimpinan berhasil dihapus.');
+    }
+
+
+    // ===============================
+    // LIST DATA
+    // ===============================
+    public function beritaIndex()
+    {
+        $beritas = Berita::latest()->get();
+        return view('admin.berita.index', compact('beritas'));
+    }
+
+    // ===============================
+    // FORM TAMBAH
+    // ===============================
+    public function beritaCreate()
+    {
+        return view('admin.berita.create');
+    }
+
+    // ===============================
+    // SIMPAN DATA
+    // ===============================
+    public function beritaStore(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+
+        $data = $request->except('_token');
+
+        // slug otomatis
+        $data['slug'] = Str::slug($request->title);
+
+        // simpan user_id dari admin login
+        $data['user_id'] = Auth::id();
+
+        // upload gambar
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/beritas'), $filename);
+
+            $data['image'] = 'uploads/beritas/' . $filename;
+        }
+
+        Berita::create($data);
+
+        return redirect()->route('admin.berita.index')
+            ->with('success', 'Berita berhasil ditambahkan');
+    }
+
+    // ===============================
+    // FORM EDIT
+    // ===============================
+    public function beritaEdit($id)
+    {
+        $berita = Berita::findOrFail($id);
+        return view('admin.berita.edit', compact('berita'));
+    }
+
+    // ===============================
+    // UPDATE DATA
+    // ===============================
+    public function beritaUpdate(Request $request, $id)
+    {
+        $berita = Berita::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required'
+        ]);
+
+        $data = $request->except(['_token', '_method', 'user_id']);
+
+        // update slug
+        $data['slug'] = Str::slug($request->title);
+
+        // upload gambar baru
+        if ($request->hasFile('image')) {
+
+            if ($berita->image && file_exists(public_path($berita->image))) {
+                unlink(public_path($berita->image));
+            }
+
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/beritas'), $filename);
+
+            $data['image'] = 'uploads/beritas/' . $filename;
+        }
+
+        $berita->update($data);
+
+        return redirect()->route('admin.berita.index')
+            ->with('success', 'Berita berhasil diupdate');
+    }
+    
+    public function beritaShow($id)
+    {
+        $berita = Berita::findOrFail($id);
+        return view('admin.berita.show', compact('berita'));
+    }
+
+    public function beritaDestroy($id)
+    {
+        $berita = Berita::findOrFail($id);
+
+        if ($berita->image && file_exists(public_path($berita->image))) {
+            unlink(public_path($berita->image));
+        }
+
+        $berita->delete();
+
+        return back()->with('success', 'Berita berhasil dihapus');
+    }
+
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    public function contactStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'message' => 'required',
+        ]);
+
+        DB::table('contact_messages')->insert([
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return back()->with('success', 'Pesan berhasil dikirim');
+    }
+
+    // ================= VIDEO =================
+
+    public function videoUser()
+    {
+        $videos = Video::where('is_active', 1)
+            ->latest()
+            ->get();
+
+        return view('videos', compact('videos'));
+    }
+
+
+    public function videoIndex()
+    {
+        $videos = Video::latest()->get();
+
+        return view('admin.video.index', compact('videos'));
+    }
+
+
+    public function videoCreate()
+    {
+        return view('admin.video.create');
+    }
+
+
+    public function videoStore(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'youtube_link' => 'required'
+        ]);
+
+        Video::create([
+            'title' => $request->title,
+            'youtube_link' => $request->youtube_link,
+            'is_active' => $request->is_active ?? 1
+        ]);
+
+        return redirect()->route('admin.video.index')
+            ->with('success', 'Video berhasil ditambahkan');
+    }
+
+
+    public function videoEdit($id)
+    {
+        $video = Video::findOrFail($id);
+
+        return view('admin.video.edit', compact('video'));
+    }
+
+
+    public function videoUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required',
+            'youtube_link' => 'required'
+        ]);
+
+        $video = Video::findOrFail($id);
+
+        $video->update([
+            'title' => $request->title,
+            'youtube_link' => $request->youtube_link,
+            'is_active' => $request->is_active ?? 1
+        ]);
+
+        return redirect()->route('admin.video.index')
+            ->with('success', 'Video berhasil diupdate');
+    }
+
+
+    public function videoDelete($id)
+    {
+        $video = Video::findOrFail($id);
+        $video->delete();
+
+        return redirect()->route('admin.video.index')
+            ->with('success', 'Video berhasil dihapus');
+    }
+    // Header
+    public function __construct()
+    {
+        // Share header ke semua view
+        $header = HeaderSetting::first();
+        view()->share('header', $header);
+    }
+
+
+    // Halaman Edit Header
+    public function headerEdit()
+    {
+        $header = HeaderSetting::first();
+
+        // Jika belum ada → buat 1 data saja
+        if (!$header) {
+            $header = HeaderSetting::create([
+                'image' => null
+            ]);
+        }
+
+        return view('admin.header', compact('header'));
+    }
+
+
+    // Update Header
+    public function headerUpdate(Request $request)
+    {
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        // Ambil header pertama saja (tidak buat baru)
+        $header = HeaderSetting::firstOrFail();
+
+        if ($request->hasFile('image')) {
+
+            // Hapus gambar lama
+            if ($header->image && file_exists(public_path('uploads/header/' . $header->image))) {
+                unlink(public_path('uploads/header/' . $header->image));
+            }
+
+            $file = $request->file('image');
+
+            $namaFile = time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path('uploads/header'), $namaFile);
+
+            $header->image = $namaFile;
+        }
+
+        $header->save();
+
+        return back()->with('success', 'Header berhasil diperbarui');
+    }
+}
