@@ -1,48 +1,53 @@
 @extends('layout.App')
 
 @section('content')
-    <!-- Header Start -->
-    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+    <!-- Header -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header d-flex align-items-center">
         <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
-                    <h1 class="display-5 text-white animated slideInDown ">STRUKTUR ORGANISASI</h1>
-                    <nav aria-label="breadcrumb">
+                    <h2 class="display-5 text-white">STRUKTUR ORGANISASI</h2>
+                    <nav>
                         <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" href="#">Struktur Organisasi</a>
+                            <li class="breadcrumb-item">
+                                <a class="text-white" href="{{ url('/') }}">Home</a>
                             </li>
+                            <li class="breadcrumb-item text-white active">Struktur Organisasi</li>
                         </ol>
                     </nav>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Header End -->
+
+    <!-- Content -->
     <div class="container py-5">
+
         <!-- Judul -->
         <div class="text-center mb-4">
-            <h3 class="fw-bold text-title-dark">STRUKTUR ORGANISAI</h3>
+            <h3 class="fw-bold text-title-dark">STRUKTUR ORGANISASI</h3>
             <p class="text-muted">Akademi Komunitas Kelautan dan Perikanan Wakatobi</p>
         </div>
 
-        <!-- Gambar Struktur -->
-        <div class="row justify-content-center">
+        <!-- Gambar -->
+        <div class="row">
             <div class="col-12">
-                <div class="org-wrapper text-center">
-                    @if ($struktur && $struktur->image)
-                        <img src="{{ asset('uploads/struktur/' . $struktur->image) }}" alt="Struktur Organisasi"
-                            class="org-image img-fluid rounded shadow-sm"
-                            style="width:100%; max-width:1200px; height:700px; object-fit:cover;">
-                    @else
-                        <p class="text-center text-muted text-title-dark">Struktur organisasi belum tersedia.</p>
-                    @endif
-                </div>
+                @if ($struktur && $struktur->image)
+                    <img src="{{ asset('uploads/struktur/' . $struktur->image) }}"
+                        class="img-fluid w-100 shadow-sm struktur-img">
+                @else
+                    <p class="text-center text-muted">
+                        Struktur organisasi belum tersedia.
+                    </p>
+                @endif
             </div>
         </div>
+
     </div>
 
+    <!-- CIVITAS (TANPA CONTAINER BARU) -->
     <div class="container py-5">
+
         <div class="text-center mb-5">
             <h3 class="fw-bold text-title-dark">CIVITAS AKADEMIKA</h3>
             <p class="text-muted">Akademi Komunitas Kelautan dan Perikanan Wakatobi</p>
@@ -63,8 +68,7 @@
 
                         <div class="leader-card">
                             @if ($leader->photo)
-                                <img src="{{ asset('uploads/leaders/' . $leader->photo) }}" alt="{{ $leader->name }}"
-                                    class="img-fluid">
+                                <img src="{{ asset('uploads/leaders/' . $leader->photo) }}" class="img-fluid">
                             @else
                                 <img src="https://via.placeholder.com/400x600?text=No+Image" class="img-fluid">
                             @endif
@@ -73,9 +77,11 @@
                         <div class="leader-name">
                             {{ $leader->name }}, {{ $leader->degree }}
                         </div>
+
                     </div>
                 @endforeach
             </div>
         @endforeach
+
     </div>
 @endsection

@@ -60,7 +60,16 @@
                             </div>
                         @endif
 
-                        <input type="file" name="image" class="form-control">
+                        <input type="file" name="image" accept=".jpg,.jpeg,.png"
+                            class="form-control @error('image') is-invalid @enderror" onchange="validateFile(this)">
+
+                        <small class="text-muted">
+                            Ukuran disarankan: 900 × 400 px | Format: JPG/PNG | Maksimal 2MB
+                        </small>
+
+                        @error('image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Tanggal Publish -->
@@ -102,3 +111,24 @@
 
     </div>
 @endsection
+<script>
+    function validateFile(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        const maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (!allowedTypes.includes(file.type)) {
+            alert('Hanya file JPG dan PNG yang diperbolehkan!');
+            input.value = '';
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alert('Ukuran file maksimal 2MB!');
+            input.value = '';
+            return;
+        }
+    }
+</script>

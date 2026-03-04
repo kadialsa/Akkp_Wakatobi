@@ -447,6 +447,10 @@ body {
     transform: scale(1.1);
 }
 
+.struktur-img {
+    border-radius: 12px; /* bisa ubah jadi 8px kalau mau lebih kecil */
+}
+
 
 /*** Team ***/
 .team-item img {
@@ -623,11 +627,7 @@ body {
 /* end berita */
 
 /* about */
-
-
         .about-hero {
-            background: linear-gradient(rgba(24, 29, 56, .7), rgba(24, 29, 56, .7)), url(../img/about1.jpg);
-            /* background: linear-gradient(120deg, #0d6efd, #0b5ed7); */
             color: #fff;
             padding: 100px 0;
         }

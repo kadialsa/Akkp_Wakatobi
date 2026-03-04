@@ -25,6 +25,14 @@ class AkreditasiController extends Controller
             'Tidak Terakreditasi' => 'danger',
         ];
 
+        $request->validate([
+            // Hanya gambar
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:width=200,height=200',
+
+            // Bisa file atau gambar
+            'file'  => 'nullable|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+        
         $data = [
             'title' => $request->title,
             'badge' => $request->badge,

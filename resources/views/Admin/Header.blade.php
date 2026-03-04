@@ -35,36 +35,32 @@
                             Upload Gambar Header
                         </label>
 
-                        <input type="file" name="image" class="form-control">
+                        <input type="file" name="image" accept=".jpg,.jpeg,.png"
+                            class="form-control @error('image') is-invalid @enderror" onchange="validateFile(this)">
 
                         <small class="text-muted">
-                            Ukuran disarankan: 1920 × 450 px
+                            Ukuran disarankan: 800 × 300px | Format: JPG/PNG | Maksimal 2MB
                         </small>
+
+                        @error('image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
 
                     </div>
 
                     <!-- Preview -->
                     @if ($header && $header->image)
                         <div class="mb-4">
-
-                            {{-- <label class="form-label fw-semibold">
-                                Header Saat Ini
-                            </label> --}}
-
-                            <div >
-
+                            <div>
                                 <img src="{{ asset('uploads/header/' . $header->image) }}"
                                     style="
                                 width:100%;
                                 max-width:700px;
                                 height:200px;
                                 object-fit:cover;
-                                border-radius:10px;
-                             "
-                                    class="shadow-sm border">
-
+                                border-radius:10px;"
+                                class="shadow-sm border">
                             </div>
-
                         </div>
                     @endif
 
@@ -80,7 +76,6 @@
 
                     </div>
 
-
                 </form>
 
             </div>
@@ -88,3 +83,25 @@
 
     </div>
 @endsection
+
+<script>
+function validateFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+
+    if (!allowedTypes.includes(file.type)) {
+        alert('Hanya file JPG dan PNG yang diperbolehkan!');
+        input.value = '';
+        return;
+    }
+
+    if (file.size > maxSize) {
+        alert('Ukuran file maksimal 2MB!');
+        input.value = '';
+        return;
+    }
+}
+</script>

@@ -97,7 +97,7 @@
                                 <small class="text-muted">
                                     Format: JPG / PNG <br>
                                     Maksimal: 2MB <br>
-                                    Rekomendasi ukuran: <strong>840 x 1040 px (rasio 4:5)</strong>
+                                    Rekomendasi ukuran: <strong>400 x 600 px </strong>
                                 </small>
 
                                 @error('photo')
@@ -134,31 +134,41 @@
 
 @push('scripts')
     <script>
-        document.getElementById('photoInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+document.getElementById('photoInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
 
-            const img = new Image();
-            const reader = new FileReader();
+    const img = new Image();
+    const reader = new FileReader();
 
-            reader.onload = function(event) {
-                img.src = event.target.result;
-                img.onload = function() {
-                    const ratio = img.width / img.height;
+    reader.onload = function(event) {
+        img.src = event.target.result;
 
-                    if (Math.abs(ratio - (4 / 5)) > 0.01) {
-                        alert("⚠ Rasio gambar harus 4:5 (contoh 840x1040)");
-                        e.target.value = "";
-                        return;
-                    }
+        img.onload = function() {
+            const ratio = img.width / img.height;
+            const expectedRatio = 2 / 3; // 400x600
 
-                    const preview = document.getElementById('previewImage');
-                    preview.src = event.target.result;
-                    preview.style.display = "block";
-                };
-            };
+            // Cek rasio 2:3
+            if (Math.abs(ratio - expectedRatio) > 0.01) {
+                alert("⚠ Rasio gambar harus 2:3 (contoh 400x600 px)");
+                e.target.value = "";
+                return;
+            }
 
-            reader.readAsDataURL(file);
-        });
-    </script>
+            // (Optional) Cek ukuran minimal
+            if (img.width < 400 || img.height < 600) {
+                alert("⚠ Ukuran minimal gambar adalah 400x600 px");
+                e.target.value = "";
+                return;
+            }
+
+            const preview = document.getElementById('previewImage');
+            preview.src = event.target.result;
+            preview.classList.remove('d-none');
+        };
+    };
+
+    reader.readAsDataURL(file);
+});
+</script>
 @endpush

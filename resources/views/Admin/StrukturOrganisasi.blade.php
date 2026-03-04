@@ -47,12 +47,11 @@
                                     onchange="previewImage(this)">
 
                                 <small class="text-muted">
-                                    Format JPG / PNG, maksimal 2MB
+                                 Ukuran Gambar 1600 x 900 px | Format JPG / PNG | maksimal 2MB
                                 </small>
                             </div>
 
-
-
+                            
                             <!-- Preview Lebih Besar -->
                             <div class="text-center mb-3">
 

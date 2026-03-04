@@ -39,16 +39,20 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Thumbnail Program Studi</label>
+
                         @if ($prodi->thumbnail)
                             <div class="mb-2">
                                 <img src="{{ asset($prodi->thumbnail) }}" width="150" class="rounded border">
                             </div>
                         @endif
-                        <input type="file" name="thumbnail" class="form-control"
-                            onchange="previewImage(event,'previewThumbnail')">
+
+                        <input type="file" name="thumbnail" class="form-control" accept=".jpg,.jpeg,.png"
+                            onchange="validateFile(this); previewImage(event,'previewThumbnail')">
+
                         <small class="text-muted">
                             Ukuran disarankan: 800x600px | Format: JPG/PNG | Maksimal 2MB
                         </small>
+
                         <img id="previewThumbnail" class="img-fluid rounded d-none mt-2" width="200">
                     </div>
 
@@ -87,11 +91,14 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Ganti Gambar Sejarah</label>
-                        <input type="file" name="sejarah_image" class="form-control"
-                            onchange="previewImage(event, 'previewSejarah')">
+
+                        <input type="file" name="sejarah_image" class="form-control" accept=".jpg,.jpeg,.png"
+                            onchange="validateFile(this); previewImage(event,'previewSejarah')">
+
                         <small class="text-muted">
-                            Ukuran disarankan: 900x600px | Format: JPG/PNG | Maksimal 2MB
+                            Ukuran disarankan: 1400x760px | Format: JPG/PNG | Maksimal 2MB
                         </small>
+
                         <img id="previewSejarah" class="img-fluid rounded d-none mt-2" width="200">
                     </div>
 
@@ -235,11 +242,14 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Ganti Foto Kaprodi</label>
-                        <input type="file" name="kaprodi_photo" class="form-control"
-                            onchange="previewImage(event, 'previewKaprodi')">
+
+                        <input type="file" name="kaprodi_photo" class="form-control" accept=".jpg,.jpeg,.png"
+                            onchange="validateFile(this); previewImage(event, 'previewKaprodi')">
+
                         <small class="text-muted">
-                            Ukuran disarankan: 500x500px (Persegi) | Format: JPG/PNG | Maksimal 2MB
+                            Ukuran disarankan: 300x400px (Portrait) | Format: JPG/PNG | Maksimal 2MB
                         </small>
+
                         <img id="previewKaprodi" class="img-fluid rounded d-none mt-2" width="200">
                     </div>
 
@@ -287,6 +297,26 @@
         <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">-</button>
     `;
             wrapper.appendChild(div);
+        }
+
+        function validateFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            const maxSize = 2 * 1024 * 1024; // 2MB
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('Hanya file JPG dan PNG yang diperbolehkan!');
+                input.value = '';
+                return;
+            }
+
+            if (file.size > maxSize) {
+                alert('Ukuran file maksimal 2MB!');
+                input.value = '';
+                return;
+            }
         }
     </script>
 

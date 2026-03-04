@@ -361,7 +361,7 @@ class AdminController extends Controller
             'title' => $request->title
         ]);
 
-        return redirect()->route('admin.sections.index')
+        return redirect()->route('admin.section.index')
             ->with('success', 'Section berhasil ditambahkan');
     }
 
@@ -381,7 +381,7 @@ class AdminController extends Controller
             'title' => $request->title
         ]);
 
-        return redirect()->route('admin.sections.index')
+        return redirect()->route('admin.section.index')
             ->with('success', 'Section berhasil diperbarui');
     }
 
@@ -390,7 +390,7 @@ class AdminController extends Controller
     {
         $section->delete();
 
-        return redirect()->route('admin.sections.index')
+        return redirect()->route('admin.section.index')
             ->with('success', 'Section berhasil dihapus');
     }
 
@@ -439,34 +439,54 @@ class AdminController extends Controller
 
     public function leader_update(Request $request, Leader $leader)
     {
+        // Validasi dasar dulu
         $request->validate([
             'position' => 'required|string|max:255',
             'name'     => 'required|string|max:255',
             'degree'   => 'nullable|string|max:255',
-            'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:ratio=4/5'
+            'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'position.required' => 'Jabatan wajib diisi.',
             'name.required'     => 'Nama wajib diisi.',
             'photo.image'       => 'File harus berupa gambar.',
             'photo.mimes'       => 'Format gambar harus JPG atau PNG.',
             'photo.max'         => 'Ukuran gambar maksimal 2MB.',
-            'photo.dimensions'  => 'Gambar harus memiliki rasio 4:5 (contoh 840x1040).'
         ]);
 
-        // Update text data
+        // Validasi tambahan untuk rasio & ukuran
+        if ($request->hasFile('photo')) {
+
+            $file = $request->file('photo');
+            [$width, $height] = getimagesize($file);
+
+            // Cek minimal ukuran
+            if ($width < 400 || $height < 600) {
+                return back()
+                    ->withErrors(['photo' => 'Ukuran minimal gambar adalah 400x600 px.'])
+                    ->withInput();
+            }
+
+            // Cek rasio 2:3 (cross multiply supaya stabil)
+            if ($width * 3 !== $height * 2) {
+                return back()
+                    ->withErrors(['photo' => 'Rasio gambar harus 2:3 (contoh 400x600 atau 600x900).'])
+                    ->withInput();
+            }
+        }
+
+        // Update data teks
         $leader->position = $request->position;
         $leader->name     = $request->name;
         $leader->degree   = $request->degree;
 
-        // Jika ada foto baru
+        // Upload foto baru jika ada
         if ($request->hasFile('photo')) {
 
-            // Hapus foto lama jika ada
+            // Hapus foto lama
             if ($leader->photo && File::exists(public_path('uploads/leaders/' . $leader->photo))) {
                 File::delete(public_path('uploads/leaders/' . $leader->photo));
             }
 
-            // Simpan foto baru
             $file = $request->file('photo');
             $imageName = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/leaders'), $imageName);
@@ -592,7 +612,7 @@ class AdminController extends Controller
         return redirect()->route('admin.berita.index')
             ->with('success', 'Berita berhasil diupdate');
     }
-    
+
     public function beritaShow($id)
     {
         $berita = Berita::findOrFail($id);

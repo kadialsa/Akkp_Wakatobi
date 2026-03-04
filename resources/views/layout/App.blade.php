@@ -72,7 +72,8 @@
 
         <footer class="container-fluid footer-bg text-light mt-5 py-5">
 
-            <div class="row gx-5 gy-4 px-5 align-items-start mx-0">
+            <div class="container">
+            <div class="row gx-5 gy-4 align-items-start">
 
                 <!-- LOGO + CONTACT -->
                 <div class="col-lg-5 col-md-12">

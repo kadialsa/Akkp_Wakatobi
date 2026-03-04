@@ -40,12 +40,18 @@
                     {{-- Thumbnail Prodi --}}
                     <div class="mb-3">
                         <label class="form-label">Thumbnail Prodi</label>
-                        <input type="file" name="thumbnail" class="form-control @error('thumbnail') is-invalid @enderror"
-                            onchange="previewImage(event, 'previewThumbnail')">
+
+                        <input type="file" name="thumbnail" accept=".jpg,.jpeg,.png"
+                            class="form-control @error('thumbnail') is-invalid @enderror"
+                            onchange="validateFile(this); previewImage(event, 'previewThumbnail')">
 
                         <small class="text-muted">
-                            Ukuran disarankan: 800x600px | Format: JPG, PNG | Maksimal 2MB
+                            Ukuran disarankan: 500x500px | Format: JPG, PNG | Maksimal 2MB
                         </small>
+
+                        @error('thumbnail')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <img id="previewThumbnail" src="{{ asset('img/default-thumbnail.jpg') }}" class="img-fluid rounded mb-3"
@@ -71,13 +77,18 @@
 
                     <div class="mb-3">
                         <label class="form-label">Gambar Sejarah</label>
-                        <input type="file" name="sejarah_image"
+
+                        <input type="file" name="sejarah_image" accept=".jpg,.jpeg,.png"
                             class="form-control @error('sejarah_image') is-invalid @enderror"
-                            onchange="previewImage(event, 'previewSejarah')">
+                            onchange="validateFile(this); previewImage(event, 'previewSejarah')">
 
                         <small class="text-muted">
-                            Ukuran disarankan: 900x600px | Format: JPG, PNG | Maksimal 2MB
+                            Ukuran disarankan: 1400x760px | Format: JPG, PNG | Maksimal 2MB
                         </small>
+
+                        @error('sejarah_image')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <img id="previewSejarah" src="{{ asset('img/default-sejarah.jpg') }}" class="img-fluid rounded mb-3"
                         width="200">
@@ -136,13 +147,18 @@
 
                     <div class="mb-3">
                         <label class="form-label">Foto Kaprodi</label>
-                        <input type="file" name="kaprodi_photo"
+
+                        <input type="file" name="kaprodi_photo" accept=".jpg,.jpeg,.png"
                             class="form-control @error('kaprodi_photo') is-invalid @enderror"
-                            onchange="previewImage(event, 'previewKaprodi')">
+                            onchange="validateFile(this); previewImage(event, 'previewKaprodi')">
 
                         <small class="text-muted">
-                            Ukuran disarankan: 500x500px (Persegi) | Format: JPG, PNG | Maksimal 2MB
+                            Ukuran disarankan: 300x400px | Format: JPG, PNG | Maksimal 2MB
                         </small>
+
+                        @error('kaprodi_photo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <img id="previewKaprodi" src="{{ asset('img/default-user.png') }}" class="img-fluid rounded mb-3"
                         width="200">
@@ -178,6 +194,26 @@
                 output.src = reader.result;
             };
             reader.readAsDataURL(file);
+        }
+
+        function validateFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            const maxSize = 2 * 1024 * 1024; // 2MB
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('Hanya file JPG dan PNG yang diperbolehkan!');
+                input.value = '';
+                return;
+            }
+
+            if (file.size > maxSize) {
+                alert('Ukuran file maksimal 2MB!');
+                input.value = '';
+                return;
+            }
         }
     </script>
 @endsection
