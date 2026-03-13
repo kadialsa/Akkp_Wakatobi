@@ -204,7 +204,9 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Deskripsi Kurikulum</label>
-                        <textarea name="kurikulum_content" class="form-control" rows="4">{{ old('kurikulum_content', $prodi->kurikulum_content) }}</textarea>
+                        <textarea id="editor_kurikulum" name="kurikulum_content" class="form-control" rows="4">
+                         {{ old('kurikulum_content', $prodi->kurikulum_content) }}
+                         </textarea>
                     </div>
 
                 </div>
@@ -262,14 +264,19 @@
         </form>
     </div>
 
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
     <script>
+
+        CKEDITOR.replace('editor_kurikulum'); //CKEditor
+
         function addMisi() {
             let wrapper = document.getElementById('misi-wrapper');
             let div = document.createElement('div');
             div.classList.add('input-group', 'mb-2');
             div.innerHTML = `
-        <input type="text" name="misi[]" class="form-control" placeholder="Misi">
-        <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">-</button>
+    <input type="text" name="misi[]" class="form-control" placeholder="Misi">
+    <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">-</button>
     `;
             wrapper.appendChild(div);
         }
@@ -293,8 +300,8 @@
             let div = document.createElement('div');
             div.classList.add('input-group', 'mb-2');
             div.innerHTML = `
-        <input type="text" name="tujuan[]" class="form-control" placeholder="Tujuan">
-        <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">-</button>
+    <input type="text" name="tujuan[]" class="form-control" placeholder="Tujuan">
+    <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">-</button>
     `;
             wrapper.appendChild(div);
         }
@@ -319,5 +326,5 @@
             }
         }
     </script>
-
+    
 @endsection

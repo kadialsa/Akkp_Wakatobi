@@ -41,7 +41,7 @@
 
     <!-- Service Start -->
 
-    <div class="container-xxl py-5 service-section">
+    <div class="container-xxl mb-5  service-section">
         <div class="container position-relative">
             <div class="text-center mb-5">
                 <h2 class="fw-bold text-title-dark">INFORMASI & LAYANAN</h2>
@@ -51,7 +51,7 @@
 
                 <!-- Penelitian dan Pengembangan -->
                 <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <a href="/penelitian-dan-pengembangan" class="text-decoration-none text-dark">
+                    <a href="https://sinta.kemdiktisaintek.go.id/affiliations/profile/8244393" target="_blank" class="text-decoration-none text-dark">
                         <div class="service-item text-center p-4 h-100">
                             <div class="service-icon">
                                 <i class="fa fa-flask"></i>
@@ -102,7 +102,8 @@
     {{-- Service End --}}
 
     <!-- About Start -->
-    <div class="container-xxl py-5">
+    <div class="container-fluid py-5 about-section">
+
         <div class="container">
             <div class="row g-5">
                 {{-- Gambar About --}}
@@ -121,12 +122,11 @@
                 </div>
 
                 {{-- Konten About --}}
-                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="col-lg-6 fadeInUp" data-wow-delay="0.3s">
                     <h2 class="mb-4 text-title-dark">SAMBUTAN DIREKTUR AKKP </h2>
-                    <h4 class="mb-2 text-title-medium">{{ $about->name ?? 'Nama Tidak Tersedia' }}</h4>
+                    <h4 class="mb-2 text-title-dark">{{ $about->name ?? 'Nama Tidak Tersedia' }}</h4>
                     <h6 class="about-title mb-4 ">{{ $about->title ?? '' }}</h6>
                     <p class="section-text mb-4 text-title-light">{!! $about->description ?? 'Deskripsi About belum ditambahkan.' !!}</p>
-                    {{-- <a class="btn btn-primary py-3 px-5 mt-2" href="{{ route('about') }}">Read More</a> --}}
                 </div>
             </div>
         </div>
@@ -185,6 +185,10 @@
 
                             <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
 
+                                <span class="news-views text-muted" style="font-size:15px;">
+                                    <i class="fa fa-eye me-1"></i> {{ $item->views ?? 0 }} Dilihat
+                                </span>
+
                                 <span class="news-date">
                                     {{ $item->published_at ? \Carbon\Carbon::parse($item->published_at)->translatedFormat('d M Y') : '-' }}
                                 </span>
@@ -212,7 +216,7 @@
     <!-- Courses End -->
 
 
-    <!-- Team Start -->
+    <!-- Prodi Start -->
     <div class="container-xxl py-5">
         <div class="container">
 
@@ -260,7 +264,7 @@
     </div>
 
 
-    <!-- Team End -->
+    <!-- prodi End -->
 
     @if (isset($cooperations) && $cooperations->count())
         <section class="py-5">

@@ -39,6 +39,13 @@ class AppServiceProvider extends ServiceProvider
             $view->with('unreadMessages', $unreadMessages);
         });
 
+        View::composer('layout.admin', function ($view) {
+
+            $unreadMessages = ContactMessage::where('is_read', 0)->count();
+
+            $view->with('unreadMessages', $unreadMessages);
+        });
+
         $header = HeaderSetting::first();
 
         view()->share('header', $header);

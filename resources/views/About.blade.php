@@ -67,9 +67,8 @@
 
 
         {{-- VISI & MISI --}}
-
         @if ($visimisi)
-            <section class="tupoksi-section py-5">
+            <section class="visimisi-section py-5">
                 <div class="container py-2">
 
                     <div class="text-center mb-3">
@@ -82,13 +81,13 @@
                             <div class="content-box">
 
                                 <!-- VISI -->
-                                <h4 class="section-heading text-title-medium">Visi</h4>
+                                <h4 class="section-heading text-title-medium text-center">Visi</h4>
                                 <p class="content-text">
                                     {{ $visimisi->visi }}
                                 </p>
 
                                 <!-- MISI -->
-                                <h4 class="section-heading mt-4 text-title-medium">Misi</h4>
+                                <h4 class="section-heading mt-4 text-title-medium text-center">Misi</h4>
 
                                 <ol class="content-list">
                                     @foreach (explode("\n", $visimisi->misi) as $item)
@@ -127,7 +126,7 @@
                                 <i class="bi bi-clipboard-check"></i>
                             </div>
                             <h4 class="tupoksi-title text-title-medium">Tugas Pokok</h4>
-                            <p class="p-text">
+                            <p class="p-text" style="text-align: justify;">
                                 {{ $tupoksi->tugas_pokok }}
                             </p>
                         </div>
@@ -140,8 +139,7 @@
                                 <i class="bi bi-diagram-3"></i>
                             </div>
                             <h4 class="tupoksi-title text-title-medium">Fungsi</h4>
-
-                            <ol class="tupoksi-list">
+                            <ol class="tupoksi-list" style="text-align:justify;">
                                 @foreach (explode("\n", $tupoksi->fungsi) as $item)
                                     @if (trim($item) !== '')
                                         <li>{{ $item }}</li>

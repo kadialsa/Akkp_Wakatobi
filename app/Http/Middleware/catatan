@@ -1,0 +1,36 @@
+TRACKVISITOR
+menghitung IP = 1 kali kunjungan.
+
+
+ if (!$request->is('admin/*')) {
+
+            $ip = $request->ip();
+
+            $exists = Visitor::where('ip_address', $ip)
+                ->whereDate('created_at', today())
+                ->exists();
+
+            if (!$exists) {
+                Visitor::create([
+                    'ip_address' => $ip,
+                    'user_agent' => $request->userAgent(),
+                ]);
+            }
+        }
+
+        return $next($request);
+
+menghitung semua halaman user sebagai kunjungan
+
+
+     // Jangan hitung halaman admin
+    if (!$request->is('admin') && !$request->is('admin/*')) {
+
+        Visitor::create([
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+    }
+
+    return $next($request);

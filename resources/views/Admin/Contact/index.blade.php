@@ -1,105 +1,103 @@
 @extends('layout.admin')
 
 @section('content')
-<div class="container-fluid mt-4">
+    <div class="container-fluid mt-4">
 
-    {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold">Pesan Kontak Masuk</h4>
-    </div>
-
-    {{-- Alert --}}
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+        {{-- Header --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold">Pesan Kontak Masuk</h4>
         </div>
-    @endif
 
-    {{-- Tabel --}}
-    <div class="card shadow-sm">
-        <div class="card-body table-responsive">
+        {{-- Alert --}}
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
-            <table class="table table-bordered table-hover align-middle">
+        {{-- Tabel --}}
+        <div class="card shadow-sm">
+            <div class="card-body table-responsive">
 
-                <thead class="table-light text-center">
-                    <tr>
-                        <th width="60">No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Subjek</th>
-                        <th width="150">Tanggal</th>
-                        <th width="160">Aksi</th>
-                    </tr>
-                </thead>
+                <table class="table table-bordered table-hover align-middle">
 
-                <tbody>
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th style="width:60px;">NO</th>
+                            <th style="width:190px;">NAMA</th>
+                            <th style="width:200px;">EMAIL</th>
+                            <th style="width:300px;">SUBJEK</th>
+                            <th style="width:150px;">TANGGAL</th>
+                            <th style="width:120px;" class="text-center">AKSI</th>
+                        </tr>
+                    </thead>
 
-                    @forelse($messages as $index => $item)
-                    <tr>
-                        <td class="text-center">
-                            {{ $messages->firstItem() + $index }}
-                        </td>
+                    <tbody>
 
-                        <td>{{ $item->name }}</td>
+                        @forelse($messages as $index => $item)
+                            <tr class="{{ !$item->is_read ? 'table-secondary' : '' }}">
 
-                        <td>{{ $item->email }}</td>
+                                <td class="text-center">
+                                    {{ $messages->firstItem() + $index }}
+                                </td>
 
-                        <td>
-                            {{ $item->subject ?? '-' }}
-                        </td>
+                                <td>
+                                    {{ $item->name }}
+                                </td>
 
-                        <td class="text-center">
-                            {{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}
-                        </td>
+                                <td>
+                                    {{ $item->email }}
+                                </td>
 
-                        <td class="text-center">
+                                <td>
+                                    {{ $item->subject ?? '-' }}
+                                </td>
 
-                            <div class="d-flex justify-content-center gap-2">
+                                <td class="text-center">
+                                    {{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}
+                                </td>
 
-                                {{-- Detail --}}
-                                <a href="{{ route('admin.contact.show',$item->id) }}"
-                                   class="btn btn-sm btn-info">
-                                    View
-                                </a>
+                                <td class="text-center" style="white-space: nowrap; width:120px;">
 
-                                {{-- Hapus --}}
-                                <form action="{{ route('admin.contact.delete',$item->id) }}"
-                                      method="POST"
-                                      onsubmit="return confirm('Hapus pesan ini?')">
+                                    <a href="{{ route('admin.contact.show', $item->id) }}"
+                                        class="btn btn-info btn-sm px-2 py-1" style="margin-right:4px;">
+                                        View
+                                    </a>
 
-                                    @csrf
-                                    @method('DELETE')
+                                    <form action="{{ route('admin.contact.delete', $item->id) }}" method="POST"
+                                        style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
 
-                                    <button class="btn btn-sm btn-danger">
-                                        Hapus
-                                    </button>
+                                        <button class="btn btn-danger btn-sm px-2 py-1"
+                                            onclick="return confirm('Yakin hapus?')">
+                                            Hapus
+                                        </button>
+                                    </form>
 
-                                </form>
+                                </td>
 
-                            </div>
+                            </tr>
 
-                        </td>
-                    </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">
+                                    Belum ada pesan masuk
+                                </td>
+                            </tr>
+                        @endforelse
 
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center text-muted">
-                            Belum ada pesan masuk
-                        </td>
-                    </tr>
-                    @endforelse
+                    </tbody>
 
-                </tbody>
+                </table>
 
-            </table>
-
+            </div>
         </div>
-    </div>
 
-    {{-- Pagination --}}
-    <div class="mt-3 d-flex justify-content-center">
-        {{ $messages->links() }}
-    </div>
+        {{-- Pagination --}}
+        <div class="mt-4 d-flex justify-content-center">
+            {{ $messages->links('pagination::bootstrap-5') }}
+        </div>
 
-</div>
+    </div>
 @endsection

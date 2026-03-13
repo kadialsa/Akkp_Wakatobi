@@ -19,6 +19,8 @@
     <link href="{{ asset('css/admin.main.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/admin.slides.css') }}">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 </head>
 
 <body id="page-top">
@@ -202,30 +204,25 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar  static-top shadow">
 
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <!-- Toggle Sidebar -->
+                    <button id="sidebarToggle" class="btn btn-link d-none d-md-inline-block">
                         <i class="fa fa-bars"></i>
                     </button>
 
+                    <!-- Sidebar Toggle (Mobile) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
                     <!-- Topbar Navbar -->
+
                     <ul class="navbar-nav ml-auto">
-
-                        {{-- <!-- Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                        </li> --}}
-
                         <!-- Messages -->
                         <li class="nav-item no-arrow mx-1">
                             <a class="nav-link position-relative" href="{{ route('admin.contact.index') }}">
 
                                 <i class="fas fa-envelope fa-fw"></i>
 
-                                @if ($unreadMessages > 0)
+                                @if (!empty($unreadMessages) && $unreadMessages > 0)
                                     <span class="badge badge-danger badge-counter">
                                         {{ $unreadMessages }}
                                     </span>
@@ -316,8 +313,7 @@
                         </li>
                     </ul>
 
-                </nav>
-
+                </nav>  
 
                 <!-- End of Topbar -->
 
@@ -358,8 +354,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
-    @yield('scripts')
-
+    @stack('scripts')
 
     <script>
         document.querySelectorAll('.toggle-password').forEach(function(button) {
@@ -380,6 +375,13 @@
 
             });
         });
+
+        document.getElementById("sidebarToggle").addEventListener("click", function() {
+            document.getElementById("wrapper").classList.toggle("toggled");
+        });
+
+        document.getElementById("sidebarToggleTop").addEventListener("click", function() {
+                    document.getElementById("wrapper").classList.toggle("toggled");
     </script>
 
 </body>

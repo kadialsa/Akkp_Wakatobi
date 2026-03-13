@@ -160,23 +160,25 @@
 
 
     {{-- ================= KURIKULUM ================= --}}
-    <section class="container-xxl py-5 mb-5 bg-light">
-        <div class="container ">
+    <section class="container-xxl py-5 mb-5 kurikulum-section">
+        <div class="container">
 
-            <div class="text-center mb-4">
+            <div class="text-center mb-4 text-white">
                 <h2 class="fw-bold">
                     {{ $prodi->kurikulum_title ?? 'Kurikulum Program Studi' }}
                 </h2>
-                <p class="text-muted">
+                <p>
                     Informasi lengkap mengenai kurikulum program studi {{ $prodi->name }}
                 </p>
             </div>
 
             <div class="card shadow-sm border-0 p-4">
                 <div class="content-text">
-                    {!! $prodi->kurikulum_content
-                        ? nl2br(e($prodi->kurikulum_content))
-                        : '<p class="text-muted">Kurikulum belum tersedia.</p>' !!}
+                    @if ($prodi->kurikulum_content)
+                        {!! $prodi->kurikulum_content !!}
+                    @else
+                        <p class="text-muted">Kurikulum belum tersedia.</p>
+                    @endif
                 </div>
             </div>
 

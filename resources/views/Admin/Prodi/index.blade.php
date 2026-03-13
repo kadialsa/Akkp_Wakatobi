@@ -20,7 +20,7 @@
             <div class="card-body">
 
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered table-striped text-center">
                         <thead class="table-light">
                             <tr>
                                 <th width="5%">No</th>

@@ -36,15 +36,6 @@
                         </div>
                     @endif
 
-                    <!-- Ringkasan -->
-                    @if ($berita->excerpt)
-                        <div class="mb-4 p-4 bg-light rounded-4">
-                            <p class="mb-0 fst-italic text-muted">
-                                {{ $berita->excerpt }}
-                            </p>
-                        </div>
-                    @endif
-
                     <!-- Isi -->
                     <div class="mt-4 lh-lg" style="text-align: justify;">
                         {!! nl2br(e($berita->content)) !!}

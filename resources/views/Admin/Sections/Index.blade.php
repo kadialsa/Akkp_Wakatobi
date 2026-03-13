@@ -38,7 +38,6 @@
                         <strong>{{ $section->title }}</strong>
                     </h5>
 
-
                     <div class="d-flex align-items-center flex-wrap">
 
                         <a href="{{ route('admin.section.edit', $section->id) }}" class="btn btn-sm btn-warning mr-1 mb-2">
@@ -60,7 +59,6 @@
 
                     </div>
                 </div>
-
 
                 {{-- Card Body --}}
                 <div class="card-body">
@@ -91,8 +89,6 @@
                                                     </small>
                                                 @endif
                                             </p>
-
-
 
                                             <div class="mt-3 d-flex justify-content-center">
 

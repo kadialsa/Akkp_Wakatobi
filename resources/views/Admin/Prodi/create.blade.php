@@ -128,9 +128,12 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-header fw-bold">Kurikulum</div>
                 <div class="card-body">
+
                     <input type="text" name="kurikulum_title" class="form-control mb-3" placeholder="Judul Kurikulum"
                         value="{{ old('kurikulum_title') }}">
-                    <textarea name="kurikulum_content" class="form-control" rows="4">{{ old('kurikulum_content') }}</textarea>
+
+                    <textarea id="editor_kurikulum" name="kurikulum_content" class="form-control" rows="4">{{ old('kurikulum_content') }}</textarea>
+
                 </div>
             </div>
 
@@ -171,8 +174,12 @@
         </form>
     </div>
 
+    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
     {{-- ================= SCRIPT ================= --}}
     <script>
+        CKEDITOR.replace('editor_kurikulum');
+
         function addMisi() {
             let wrapper = document.getElementById('misi-wrapper');
             let div = document.createElement('div');

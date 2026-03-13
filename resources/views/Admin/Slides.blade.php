@@ -44,7 +44,7 @@
 
                 <!-- Table -->
                 <div class="table-responsive">
-                    <table class="table align-middle table-hover">
+                    <table class="table align-middle table-hover table-bordered">
                         <thead class="table-light">
                             <tr>
                                 <th width="60">No</th>
@@ -95,27 +95,23 @@
                                     </td>
 
                                     <!-- Aksi -->
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center flex-nowrap gap-2">
+                                    <td class="text-center justify-content-center">
+                                        <a href="{{ route('admin.slides.edit', $slider->id) }}"
+                                            class="btn btn-warning btn-sm">
+                                            Edit
+                                        </a>
 
-                                            <a href="{{ route('admin.slides.edit', $slider->id) }}"
-                                                class="btn btn-sm btn-warning">
-                                                Edit
-                                            </a>
+                                        <form action="{{ route('admin.slides.destroy', $slider->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
 
-                                            <form action="{{ route('admin.slides.destroy', $slider->id) }}" method="POST"
-                                                onsubmit="return confirm('Yakin ingin menghapus slider ini?')"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    Hapus
-                                                </button>
-                                            </form>
-
-                                        </div>
+                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">
+                                                Hapus
+                                            </button>
+                                        </form>
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>

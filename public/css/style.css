@@ -324,11 +324,22 @@ body {
     background-size: cover;
 
      height: 450px;
+
+         /* Center text */
+    display: flex;
+    align-items: center;      /* center atas bawah */
+    justify-content: center;  /* center kiri kanan */
+    text-align: center;
 }
 
 .page-header-inner {
     background: rgba(15, 23, 43, .7);
 }
+
+.page-header .container {
+    width: 100%;
+}
+
 
 .breadcrumb-item + .breadcrumb-item::before {
     color: var(--light);
@@ -693,12 +704,12 @@ body {
     line-height: 1.9;
 }
 
-
-/* baru */
+/* ================= TUPOSKI SECTION ================= */
 .tupoksi-section {
     background: #d7dbdf;
 }
 
+/* ================= TITLE ================= */
 .section-title {
     font-weight: 800;
     letter-spacing: 1px;
@@ -709,48 +720,62 @@ body {
     font-size: 0.95rem;
 }
 
-/* CARD */
+/* ================= CARD ================= */
 .tupoksi-card {
     background: #ffffff;
     border-radius: 16px;
     padding: 35px;
     height: 100%;
+    text-align: center;
     border-left: 6px solid var(--primary);
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
-    transition: 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
 }
 
 .tupoksi-card:hover {
     transform: translateY(-6px);
 }
 
-/* ICON */
+/* ================= ICON ================= */
 .tupoksi-icon {
-    width: 55px;
-    height: 55px;
-    background:var(--primary);
-    color: #fff;
-    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    margin-bottom: 20px;
+    background: linear-gradient(135deg, #00c6a2, #00a6c7);
+    border-radius: 50%;
 }
 
+.tupoksi-icon i {
+    font-size: 28px;
+    color: #ffffff;
+}
 
-/* TITLE */
+/* ================= TITLE ================= */
 .tupoksi-title {
     font-weight: 700;
     margin-bottom: 15px;
     color: #0d3b66;
 }
 
-/* LIST */
+/* ================= TEXT ================= */
+.p-text {
+    text-align: left;
+    line-height: 1.8;
+}
+
+/* ================= LIST ================= */
 .tupoksi-list {
-    padding-left: 18px;
+    text-align: left;
+    padding-left: 20px;
     line-height: 1.9;
-    font-size: 19px;
+    font-size: 16px;
+}
+
+.tupoksi-list li {
+    margin-bottom: 8px;
 }
 
 .p-text{
@@ -1163,17 +1188,9 @@ body {
 }
 
 
-
-
-
 /* ===============================
    VISI MISI & TUPOKSI THEME
 ================================= */
-
-/* Judul Section */
-/* .section-title.text-secondary {
-    color: #6c757d !important;
-} */
 
 /* VISI & MISI text - lebih gelap dari secondary */
 .section-heading,
@@ -1206,7 +1223,6 @@ body {
     letter-spacing: 1px;
     color: #495057; /* atau var(--primary) kalau mau warna brand */
 }
-
 
 
 .text-title-dark {
@@ -1250,7 +1266,7 @@ body {
 
 /* Logo */
 .footer-logo-large {
-    height: 220px;
+    height: 185px;
     object-fit: contain;
     padding: 5px;
     margin-bottom: 20px;
@@ -1397,4 +1413,76 @@ body {
 .back-to-top {
     bottom: 100px !important;
     right: 30px !important;
+}
+
+/* Backgrond sambutan */
+.about-section{
+    position: relative;
+    background: url('/img/Elemen2.png') center/cover no-repeat;
+}
+
+.about-section::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,1) 0%,      /* atas putih */
+        rgba(255,255,255,0.3) 15%,   /* mulai transparan */
+        rgba(186, 186, 186, 0.3) 30%,     /* background terlihat */
+        rgba(255,255,255,0.2) 75%,   /* mulai fade */
+        rgba(255,255,255,1) 100%     /* bawah putih penuh */
+    );
+    z-index: 1;
+}
+
+.about-section .container{
+    position: relative;
+    z-index: 2;
+}
+
+
+.about-section p{
+    color: #000000;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+/* end bacground sambutan */
+
+.kurikulum-section {
+    background: linear-gradient(
+        to bottom right,
+        #00e65c,
+        #00c6a2,
+        #00a6c7
+    );
+}
+
+
+.visimisi-section{
+    background: linear-gradient(
+        to bottom right,
+        #00e65c,
+        #00c6a2,
+        #00a6c7
+    );
+}
+
+.visimisi-section .content-box{
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.visimisi-section .section-heading{
+    font-weight: 600;
+}
+
+.visimisi-section .content-text{
+    line-height: 1.8;
+}
+
+.visimisi-section .content-list li{
+    margin-bottom: 8px;
 }

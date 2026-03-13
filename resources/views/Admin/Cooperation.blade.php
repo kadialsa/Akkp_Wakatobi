@@ -22,7 +22,7 @@
         <div class="card-body">
 
             <div class="table-responsive">
-                <table class="table align-middle table-hover">
+                <table class="table align-middle table-hover table-bordered text-center">
 
                     <thead class="table-light">
                         <tr>
@@ -70,32 +70,24 @@
                             </td>
 
                             <!-- Aksi -->
-                            <td class="text-center">
-                                <div class="d-flex justify-content-center flex-nowrap">
-
-                                    <!-- Edit -->
-                                    <a href="{{ route('admin.cooperation.edit',$item->id) }}"
-                                       class="btn btn-sm btn-warning me-2">
+                            <td class="text-center justify-content-center">
+                                    <a href="{{ route('admin.cooperation.edit',$item->id) }}" class="btn btn-warning btn-sm">
                                         Edit
                                     </a>
 
-                                    <!-- Hapus -->
-                                    <form action="{{ route('admin.cooperation.destroy',$item->id) }}"
-                                          method="POST"
-                                          class="d-inline">
+                                    <form action="{{ route('admin.cooperation.destroy',$item->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
 
-                                        <button class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Yakin ingin menghapus logo ini?')">
+                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">
                                             Hapus
                                         </button>
                                     </form>
-
-                                </div>
                             </td>
 
                         </tr>
+
+
                         @empty
                         <tr>
                             <td colspan="4" class="text-center text-muted py-4">

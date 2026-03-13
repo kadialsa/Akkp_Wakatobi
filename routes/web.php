@@ -41,9 +41,11 @@ Route::get('/prodi/{slug}', [ProdiController::class, 'show'])->name('prodi.show'
 Route::get('/contact', [AdminController::class, 'contact'])->name('contact');
 Route::post('/contact', [AdminController::class, 'contactStore'])->name('contact.store');
 
+// video terkait
+Route::get('/video', [AdminController::class, 'videoUser'])->name('video.user');
 
-Route::get('/video', [AdminController::class, 'videoUser'])
-    ->name('video.user');
+// akreditas
+Route::get('/akreditasi', [AkreditasiController::class, 'publicIndex'])->name('akreditasi.public');
 
 
 /*
@@ -111,8 +113,7 @@ Route::middleware(['authadmin'])->prefix('admin')->name('admin.')->group(functio
     Route::resource('prodi', ProdiController::class)->except(['show']);
 
     // Akreditasi
-    Route::get('akreditasi', [AkreditasiController::class, 'index'])->name('akreditasi.index');
-    Route::put('akreditasi/{id}', [AkreditasiController::class, 'update'])->name('akreditasi.update');
+    Route::resource('akreditasi', AkreditasiController::class);
 
     // Berita admin
     Route::get('/berita', [AdminController::class, 'beritaIndex'])->name('berita.index');
@@ -139,30 +140,16 @@ Route::middleware(['authadmin'])->prefix('admin')->name('admin.')->group(functio
 
     // videos
 
-    Route::get('/video', [AdminController::class, 'videoIndex'])
-        ->name('video.index');
-
-    Route::get('/video/create', [AdminController::class, 'videoCreate'])
-        ->name('video.create');
-
-    Route::post('/video/store', [AdminController::class, 'videoStore'])
-        ->name('video.store');
-
-    Route::get('/video/edit/{id}', [AdminController::class, 'videoEdit'])
-        ->name('video.edit');
-
-    Route::post('/video/update/{id}', [AdminController::class, 'videoUpdate'])
-        ->name('video.update');
-
-    Route::delete('/video/delete/{id}', [AdminController::class, 'videoDelete'])
-        ->name('video.delete');
+    Route::get('/video', [AdminController::class, 'videoIndex'])->name('video.index');
+    Route::get('/video/create', [AdminController::class, 'videoCreate'])->name('video.create');
+    Route::post('/video/store', [AdminController::class, 'videoStore'])->name('video.store');
+    Route::get('/video/edit/{id}', [AdminController::class, 'videoEdit'])->name('video.edit');
+    Route::post('/video/update/{id}', [AdminController::class, 'videoUpdate'])->name('video.update');
+    Route::delete('/video/delete/{id}', [AdminController::class, 'videoDelete'])->name('video.delete');
 
     // Header Image
-    Route::get('/header', [AdminController::class, 'headerEdit'])
-        ->name('header.edit');
-
-    Route::post('/header', [AdminController::class, 'headerUpdate'])
-        ->name('header.update');
+    Route::get('/header', [AdminController::class, 'headerEdit'])->name('header.edit');
+    Route::post('/header', [AdminController::class, 'headerUpdate'])->name('header.update');
 });
 
 /*

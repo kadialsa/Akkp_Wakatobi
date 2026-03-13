@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Akreditasi extends Model
 {
      protected $fillable = [
-        'type',
-        'title',
-        'badge',
-        'badge_color',
-        'description',
-        'image',
-        'file'
+    'title',
+    'badge',
+    'badge_color',
+    'description',
+    'image',
+    'file'
     ];
 }

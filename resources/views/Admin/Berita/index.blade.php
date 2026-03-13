@@ -22,7 +22,7 @@
                 <div class="card-body">
 
                     <div class="table-responsive">
-                        <table class="table align-middle table-hover">
+                        <table class="table table-bordered table-hover align-middle text-center">
                             <thead class="table-light">
                                 <tr>
                                     <th width="90">Gambar</th>
@@ -85,36 +85,30 @@
                                             @endif
                                         </td>
 
-                                        <!-- Aksi -->
-                                        <td class="text-center">
-                                            <div class="d-flex justify-content-center flex-nowrap">
+                                        <td style="white-space: nowrap; text-align:center;">
 
-                                                <!-- View -->
-                                                <a href="{{ route('admin.berita.show', $item->id) }}"
-                                                    class="btn btn-sm btn-info me-2">
-                                                    View
-                                                </a>
+                                            <a href="{{ route('admin.berita.show', $item->id) }}"
+                                                class="btn btn-info btn-sm" style="margin-right:1px;">
+                                                View
+                                            </a>
 
-                                                <!-- Edit -->
-                                                <a href="{{ route('admin.berita.edit', $item->id) }}"
-                                                    class="btn btn-sm btn-warning me-2">
-                                                    Edit
-                                                </a>
+                                            <a href="{{ route('admin.berita.edit', $item->id) }}"
+                                                class="btn btn-warning btn-sm" style="margin-right:1px;">
+                                                Edit
+                                            </a>
 
-                                                <!-- Hapus -->
-                                                <form action="{{ route('admin.berita.delete', $item->id) }}" method="POST"
-                                                    class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Yakin ingin menghapus berita ini?')">
-                                                        Hapus
-                                                    </button>
-                                                </form>
+                                            <form action="{{ route('admin.berita.delete', $item->id) }}" method="POST"
+                                                style="display:inline-block;">
+                                                @csrf
+                                                @method('DELETE')
 
-                                            </div>
+                                                <button class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Yakin hapus?')">
+                                                    Hapus
+                                                </button>
+                                            </form>
+
                                         </td>
-
 
                                     </tr>
                                 @empty
@@ -127,6 +121,10 @@
                             </tbody>
 
                         </table>
+                    </div>
+                    {{-- pagination --}}
+                    <div class="mt-4 d-flex justify-content-center">
+                        {{ $beritas->links('pagination::bootstrap-5') }}
                     </div>
 
                 </div>

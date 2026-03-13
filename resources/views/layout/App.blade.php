@@ -78,7 +78,7 @@
                 <!-- LOGO + CONTACT -->
                 <div class="col-lg-5 col-md-12">
 
-                    <div class="d-flex align-items-start">
+                    <div class="d-flex flex-column flex-md-row align-items-start">
 
                         <!-- Logo -->
                         <img src="{{ asset('img/logo-kkp.png') }}" alt="Logo AKKP" class="footer-logo-large">

@@ -3,14 +3,8 @@
     <div class="container-fluid align-items-stretch px-0">
 
         <!-- LOGO -->
-        <a href="/" class="navbar-brand d-flex align-items-center px-4 ">
-            <img src="/img/logo.png" alt="logo" height="75" width="70">
-            <div class="brand-text ms-3">
-                <h5 class="text-gold mb-1 fw-bold">
-                    AKKP WAKATOBI
-                </h5>
-                <small class="text-white">Akademi Komunitas Kelautan dan Perikanan Wakatobi</small>
-            </div>
+        <a href="/" class="navbar-brand px-4">
+            <img src="/img/logo1.png" alt="Logo AKKP Wakatobi" style="height:100px;">
         </a>
 
         <!-- TOGGLER -->
@@ -32,7 +26,8 @@
                         Tentang AKKP
                     </a>
                     <ul class="dropdown-menu shadow border-0 mt-2">
-                        <li><a href="{{ route('about.index') }}" class="dropdown-item">Visi & Misi</a></li>
+
+                        <li><a href="{{ route('about.index') }}" class="dropdown-item">About</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -44,60 +39,61 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        {{-- <li>
-                            <a href="/about/logo-file" class="dropdown-item">Logo & File Resmi</a></li>
-                        <li> --}}
-                            {{-- <hr class="dropdown-divider"> --}}
+                        <li><a href="https://sinta.kemdiktisaintek.go.id/affiliations/profile/8244393"
+                                class="dropdown-item">Peneitian dan Pengembangan</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
                         </li>
                         <li>
                             <a href="https://perpustakaan.akkpwakatobi.ac.id/" class="dropdown-item" target="_blank">
                                 Perpustakaan
                             </a>
                         </li>
-                    </ul>
                 </li>
+            </ul>
+            </li>
 
-                <!-- Program Studi -->
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        Program Studi
-                    </a>
+            <!-- Program Studi -->
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    Program Studi
+                </a>
 
-                    <ul class="dropdown-menu shadow border-0 mt-2">
+                <ul class="dropdown-menu shadow border-0 mt-2">
 
-                        @forelse($navbarProdis as $prodi)
+                    @forelse($navbarProdis as $prodi)
+                        <li>
+                            <a href="{{ route('prodi.show', $prodi->slug) }}" class="dropdown-item">
+                                {{ $prodi->name }}
+                            </a>
+                        </li>
+
+                        {{-- Garis pembatas --}}
+                        @if (!$loop->last)
                             <li>
-                                <a href="{{ route('prodi.show', $prodi->slug) }}" class="dropdown-item">
-                                    {{ $prodi->name }}
-                                </a>
+                                <hr class="dropdown-divider">
                             </li>
+                        @endif
 
-                            {{-- Garis pembatas --}}
-                            @if (!$loop->last)
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                            @endif
+                    @empty
 
-                        @empty
+                        <li>
+                            <span class="dropdown-item text-muted">
+                                Belum ada Program Studi
+                            </span>
+                        </li>
+                    @endforelse
 
-                            <li>
-                                <span class="dropdown-item text-muted">
-                                    Belum ada Program Studi
-                                </span>
-                            </li>
-                        @endforelse
+                </ul>
+            </li>
 
-                    </ul>
-                </li>
+            <li class="nav-item">
+                <a href="{{ route('berita.index') }}" class="nav-link">Berita</a>
+            </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('berita.index') }}" class="nav-link">Berita</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="{{ route('contact') }}" class="nav-link">Contact</a>
-                </li>
+            <li class="nav-item">
+                <a href="{{ route('contact') }}" class="nav-link">Contact</a>
+            </li>
 
             </ul>
         </div>

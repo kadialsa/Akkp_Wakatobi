@@ -33,12 +33,6 @@
                         <input type="text" name="category" class="form-control" value="{{ old('category') }}">
                     </div>
 
-                    <!-- Ringkasan -->
-                    <div class="mb-3">
-                        <label class="form-label">Ringkasan</label>
-                        <textarea name="excerpt" rows="3" class="form-control">{{ old('excerpt') }}</textarea>
-                    </div>
-
                     <!-- Konten -->
                     <div class="mb-3">
                         <label class="form-label">Isi Berita</label>

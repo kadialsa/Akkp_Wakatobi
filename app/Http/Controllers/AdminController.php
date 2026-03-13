@@ -17,6 +17,7 @@ use App\Models\StrukturOrganisasi;
 use App\Models\Tupoksi;
 use App\Models\Video;
 use App\Models\VisiMisi;
+use App\Models\Visitor;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -29,58 +30,83 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $cooperations = Cooperation::where('is_active', 1)
             ->orderBy('position')
             ->get();
 
-        $sliders = Sliders::where('is_active', 1)->orderBy('position')->get();
-        $about = About::first();
-        $akreditasi = Akreditasi::orderBy('type')->get();
+        $sliders = Sliders::where('is_active', 1)
+            ->orderBy('position')
+            ->get();
 
-        // Ambil data bulan ini
+        $about = About::first();
+        $akreditasi = Akreditasi::latest()->get();
+
+        // ===============================
+        // Bulan yang dipilih dari dropdown
+        // ===============================
+        $selectedMonth = (int) ($request->month ?? Carbon::now()->month);
+        $selectedYear  = (int) ($request->year ?? Carbon::now()->year);
+
+        // ===============================
+        // Data pengunjung berdasarkan bulan
+        // ===============================
         $visitorRaw = DB::table('visitors')
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', $selectedMonth)
+            ->whereYear('created_at', $selectedYear)
             ->groupBy('date')
             ->pluck('count', 'date');
 
-        // Buat 1 bulan penuh
-        $daysInMonth = Carbon::now()->daysInMonth;
+        // Jumlah hari dalam bulan yang dipilih
+        $daysInMonth = Carbon::create($selectedYear, $selectedMonth)->daysInMonth;
 
-        // Buat array 1 bulan penuh
         $visitors = [];
 
         for ($i = 1; $i <= $daysInMonth; $i++) {
 
-            $date = Carbon::now()->format('Y-m-') . str_pad($i, 2, '0', STR_PAD_LEFT);
+            $date =
+                $selectedYear . '-' .
+                str_pad($selectedMonth, 2, '0', STR_PAD_LEFT) . '-' .
+                str_pad($i, 2, '0', STR_PAD_LEFT);
 
             $visitors[$i] = $visitorRaw[$date] ?? 0;
         }
 
-        // Jumlah pengunjung
-        $visitorCount = DB::table('visitors')->count();
 
-        // Jumlah pesan belum dibaca
+        $visitorToday = Visitor::whereDate('created_at', Carbon::today())->count();
+
+        $visitorMonth = Visitor::whereMonth('created_at', Carbon::now()->month)->count();
+
+        $visitorCount = Visitor::count();
+
+        $messageCount = ContactMessage::count();
+
+        $newsCount = Berita::count();
+
+        $latestNews = Berita::latest()->take(3)->get();
+
+        // $visitorCount = DB::table('visitors')->count();
+
         $unreadMessages = DB::table('contact_messages')
             ->where('is_read', false)
             ->count();
 
-        // Jumlah semua pesan
         $messageCount = DB::table('contact_messages')->count();
 
-        // Jumlah berita
         $newsCount = Berita::count();
 
-        // Data grafik 7 hari terakhir
+        // ===============================
+        // Grafik 7 hari terakhir
+        // ===============================
         $visitorDataRaw = DB::table('visitors')
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
-            ->orderBy('date', 'asc')
+            ->orderBy('date', 'desc')
             ->take(7)
-            ->get();
+            ->get()
+            ->reverse();
 
         $visitorData = [
             'dates' => $visitorDataRaw->pluck('date')->toArray(),
@@ -91,21 +117,34 @@ class AdminController extends Controller
             'cooperations',
             'sliders',
             'about',
+            'akreditasi',
             'daysInMonth',
             'visitors',
-            'visitorRaw', //<-- baru
-            'akreditasi',
+            'visitorRaw',
             'visitorCount',
             'messageCount',
-            'unreadMessages', // <-- gunakan ini
+            'unreadMessages',
+
+            // dashboard admin
             'newsCount',
-            'visitorData'
+            'visitorData',
+            'selectedMonth',
+
+            'visitorToday',
+            'visitorMonth',
+            'visitorCount',
+            'messageCount',
+            'newsCount',
+            'latestNews',
+            'visitorRaw',
+            'daysInMonth',
+            'selectedMonth',
+            'selectedYear'
         ));
     }
 
     public function aboutEdit()
     {
-
         $about = About::first(); // Ambil data pertama
         return view('admin.about', compact('about'));
     }
@@ -118,23 +157,45 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required',
-            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+
+            // VALIDASI GAMBAR (LEBIH FLEKSIBEL)
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:min_width=400,min_height=500',
+
+        ], [
+            'name.required' => 'Nama direktur wajib diisi.',
+            'title.required' => 'Jabatan wajib diisi.',
+            'description.required' => 'Deskripsi sambutan wajib diisi.',
+
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Format gambar harus JPG atau PNG.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
+            'image.dimensions' => 'Ukuran gambar minimal 400 x 500 px.'
         ]);
 
         $data = $request->only(['name', 'title', 'description']);
 
-        // upload gambar jika ada
+        $path = public_path('uploads/about');
+
+        // Upload gambar jika ada
         if ($request->hasFile('image')) {
+
+            // Hapus gambar lama
+            if ($about->image && file_exists($path . '/' . $about->image)) {
+                unlink($path . '/' . $about->image);
+            }
+
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/about'), $imageName);
+
+            $imageName = time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+
+            $image->move($path, $imageName);
 
             $data['image'] = $imageName;
         }
 
         $about->update($data);
 
-        return redirect()->back()->with('success', 'Data About berhasil diperbarui');
+        return redirect()->back()->with('success', 'Data Sambutan Direktur berhasil diperbarui.');
     }
 
     // Kerjasama
@@ -522,7 +583,7 @@ class AdminController extends Controller
     // ===============================
     public function beritaIndex()
     {
-        $beritas = Berita::latest()->get();
+        $beritas = Berita::latest()->paginate(9);
         return view('admin.berita.index', compact('beritas'));
     }
 
@@ -548,6 +609,9 @@ class AdminController extends Controller
 
         // slug otomatis
         $data['slug'] = Str::slug($request->title);
+
+        // ringkasan otomatis dari isi berita
+        $data['excerpt'] = Str::limit(strip_tags($request->content), 150);
 
         // simpan user_id dari admin login
         $data['user_id'] = Auth::id();
@@ -593,6 +657,9 @@ class AdminController extends Controller
         // update slug
         $data['slug'] = Str::slug($request->title);
 
+        // update excerpt otomatis
+        $data['excerpt'] = Str::limit(strip_tags($request->content), 150);
+
         // upload gambar baru
         if ($request->hasFile('image')) {
 
@@ -631,7 +698,6 @@ class AdminController extends Controller
 
         return back()->with('success', 'Berita berhasil dihapus');
     }
-
 
     public function contact()
     {
