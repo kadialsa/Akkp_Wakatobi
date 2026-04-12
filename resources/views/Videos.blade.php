@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.App')
 
 @section('content')
     <!-- Header Start -->
