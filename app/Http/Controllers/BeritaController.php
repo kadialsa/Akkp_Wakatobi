@@ -26,6 +26,6 @@ class BeritaController extends Controller
         // Tambah 1 view setiap halaman dibuka
         $berita->increment('views');
 
-        return view('details-berita', compact('berita'));
+        return view('Details-berita', compact('berita'));
     }
 }

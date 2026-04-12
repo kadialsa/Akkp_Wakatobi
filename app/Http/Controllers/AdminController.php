@@ -701,7 +701,7 @@ class AdminController extends Controller
 
     public function contact()
     {
-        return view('contact');
+        return view('Contact');
     }
 
     public function contactStore(Request $request)
