@@ -38,7 +38,7 @@ class HomeController extends Controller
         $prodis = Prodi::latest()->get();
 
         // Kirim ke view
-        return view('home', compact(
+        return view('Home', compact(
             'sliders',
             'about',
             'cooperations',
