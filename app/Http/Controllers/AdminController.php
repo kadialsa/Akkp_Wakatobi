@@ -732,7 +732,7 @@ class AdminController extends Controller
             ->latest()
             ->get();
 
-        return view('videos', compact('videos'));
+        return view('Videos', compact('videos'));
     }
 
 
