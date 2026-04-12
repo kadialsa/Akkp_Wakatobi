@@ -44,7 +44,7 @@
     <div class="container-xxl mb-5  service-section">
         <div class="container position-relative">
             <div class="text-center mb-5">
-                <h2 class="fw-bold text-title-dark"> kita coba INFORMASI & LAYANAN</h2>
+                <h2 class="fw-bold text-title-dark">INFORMASI & LAYANAN</h2>
             </div>
 
             <div class="row g-4 justify-content-center">
