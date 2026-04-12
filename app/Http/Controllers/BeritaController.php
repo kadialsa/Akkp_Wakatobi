@@ -14,7 +14,7 @@ class BeritaController extends Controller
             ->latest()
             ->paginate(9);
 
-        return view('berita', compact('beritas'));
+        return view('Berita', compact('beritas'));
     }
 
     public function show($slug)
