@@ -317,6 +317,6 @@ public function update(Request $request, $id)
             ->where('slug', $slug)
             ->firstOrFail();
 
-        return view('admin.prodi.show', compact('prodi'));
+        return view('Admin.Prodi.show', compact('prodi'));
     }
 }
