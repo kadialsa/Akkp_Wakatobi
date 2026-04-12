@@ -17,16 +17,19 @@ class TrackVisitor
     public function handle(Request $request, Closure $next)
     {
         // Jangan hitung admin
-        if (!$request->is('admin') && !$request->is('admin/*')) {
+        if (!$request->is('admin/*')) {
 
-            if (!session()->has('visitor_counted')) {
+            $ip = $request->ip();
 
+            $exists = Visitor::where('ip_address', $ip)
+                ->whereDate('created_at', today())
+                ->exists();
+
+            if (!$exists) {
                 Visitor::create([
-                    'ip_address' => $request->ip(),
+                    'ip_address' => $ip,
                     'user_agent' => $request->userAgent(),
                 ]);
-
-                session(['visitor_counted' => true]);
             }
         }
 

@@ -22,11 +22,8 @@
 
                 <!-- Tentang AKKP -->
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        Tentang AKKP
-                    </a>
+                    <a href="#" class="nav-link dropdown-toggle">Tentang AKKP</a>
                     <ul class="dropdown-menu shadow border-0 mt-2">
-
                         <li><a href="{{ route('about.index') }}" class="dropdown-item">About</a></li>
                         <li>
                             <hr class="dropdown-divider">
@@ -39,8 +36,12 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a href="https://sinta.kemdiktisaintek.go.id/affiliations/profile/8244393"
-                                class="dropdown-item">Peneitian dan Pengembangan</a></li>
+                        <li>
+                            <a href="https://sinta.kemdiktisaintek.go.id/affiliations/profile/8244393"
+                                class="dropdown-item">
+                                Penelitian dan Pengembangan
+                            </a>
+                        </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -49,56 +50,55 @@
                                 Perpustakaan
                             </a>
                         </li>
+                    </ul>
                 </li>
-            </ul>
-            </li>
 
-            <!-- Program Studi -->
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    Program Studi
-                </a>
-
-                <ul class="dropdown-menu shadow border-0 mt-2">
-
-                    @forelse($navbarProdis as $prodi)
-                        <li>
-                            <a href="{{ route('prodi.show', $prodi->slug) }}" class="dropdown-item">
-                                {{ $prodi->name }}
-                            </a>
-                        </li>
-
-                        {{-- Garis pembatas --}}
-                        @if (!$loop->last)
+                <!-- Program Studi -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Program Studi</a>
+                    <ul class="dropdown-menu shadow border-0 mt-2">
+                        @forelse($navbarProdis as $prodi)
                             <li>
-                                <hr class="dropdown-divider">
+                                <a href="{{ route('prodi.show', $prodi->slug) }}" class="dropdown-item">
+                                    {{ $prodi->name }}
+                                </a>
                             </li>
-                        @endif
+                            @if (!$loop->last)
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                            @endif
+                        @empty
+                            <li>
+                                <span class="dropdown-item text-muted">
+                                    Belum ada Program Studi
+                                </span>
+                            </li>
+                        @endforelse
+                    </ul>
+                </li>
 
-                    @empty
+                <li class="nav-item">
+                    <a href="{{ route('berita.index') }}" class="nav-link">Berita</a>
+                </li>
 
-                        <li>
-                            <span class="dropdown-item text-muted">
-                                Belum ada Program Studi
-                            </span>
-                        </li>
-                    @endforelse
+                <li class="nav-item">
+                    <a href="{{ route('contact') }}" class="nav-link">Contact</a>
+                </li>
 
-                </ul>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ route('berita.index') }}" class="nav-link">Berita</a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ route('contact') }}" class="nav-link">Contact</a>
-            </li>
+                <!-- MOBILE JOIN -->
+                <li class="nav-item d-lg-none w-100">
+                    <div class="px-3 mt-3">
+                        <a href="https://pentaru.kkp.go.id/" class="btn btn-join-mobile w-100 text-center">
+                            Join Now <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </li>
 
             </ul>
         </div>
 
-        <!-- JOIN NOW BUTTON -->
+        <!-- DESKTOP JOIN (DI LUAR MENU) -->
         <div class="d-none d-lg-flex align-items-stretch">
             <a href="https://pentaru.kkp.go.id/" class="btn btn-join-now px-4">
                 Join Now <i class="bi bi-arrow-right ms-2"></i>
@@ -126,5 +126,20 @@
         }
 
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+</script>
+
+<script>
+    document.querySelectorAll('.dropdown-toggle').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            if (window.innerWidth < 992) {
+                e.preventDefault();
+                let parent = this.parentElement;
+                parent.classList.toggle('show');
+
+                let menu = parent.querySelector('.dropdown-menu');
+                menu.classList.toggle('show');
+            }
+        });
     });
 </script>

@@ -218,20 +218,253 @@ body {
     color: #000;
 }
 
-/**********************************
-    MOBILE MENU
-***********************************/
+/* ================= MOBILE NAVBAR FIX ================= */
 @media (max-width: 991.98px) {
-    .navbar .navbar-nav .nav-link:not(.btn) {
-        margin-right: 0;
-        padding: 10px 0;
+
+    /* Navbar tinggi lebih kecil */
+    .navbar {
+        min-height: 70px;
     }
 
-    .navbar .navbar-nav {
-        border-top: 1px solid #eeeeee;
-        padding-top: 10px;
+    /* Logo lebih kecil */
+    .navbar .navbar-brand img {
+        height: 60px !important;
+    }
+
+    /* Menu jadi full width & rapi */
+    .navbar-collapse {
+        background: linear-gradient(
+            180deg,
+            #2b6cb0,
+            #1fa2c6,
+            #22c1c3
+        );
+        padding: 15px 20px;
+    }
+
+    /* Link menu */
+    .navbar .navbar-nav .nav-link:not(.btn) {
+        padding: 12px 0;
+        font-size: 16px;
+        margin-right: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Hover effect */
+    .navbar .navbar-nav .nav-link:hover {
+        color: #16e35a !important;
+        padding-left: 5px;
+    }
+
+    /* Dropdown menu */
+    .dropdown-menu {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding-left: 10px;
+    }
+
+    .dropdown-item {
+        color: #ffffff;
+        padding: 10px 0;
+        font-size: 15px;
+    }
+
+    .dropdown-item:hover {
+        background: transparent;
+        color: #16e35a;
+        padding-left: 5px;
+    }
+
+    /* Divider */
+    .dropdown-divider {
+        border-color: rgba(255,255,255,0.2);
+    }
+
+    /* Button Join Now muncul di mobile */
+    .btn-join-now {
+        margin-top: 15px;
+        width: 100%;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    /* ================= MOBILE JOIN BUTTON ================= */
+    .btn-join-mobile {
+        display: block;
+        background: linear-gradient(135deg, #1fa2c6, #22c1c3);
+        color: #ffffff !important;
+        font-weight: 700;
+        padding: 14px;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Hover effect */
+    .btn-join-mobile:hover {
+        background: linear-gradient(135deg, #00a5bb, #1cc2a5);
+        transform: translateY(-2px);
+    }
+
+    /* Biar ada jarak dari menu */
+    @media (max-width: 991.98px) {
+        .navbar-nav {
+            gap: 5px;
+        }
     }
 }
+
+/* ================= FLOAT BUTTON RESPONSIVE ================= */
+
+/* Default (desktop) */
+.akkp-float-img img,
+.lapor-float img {
+    width: 110px;
+    height: auto;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .akkp-float-img img,
+    .lapor-float img {
+        width: 90px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .akkp-float-img {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .lapor-float {
+        bottom: 15px;
+        left: 15px;
+    }
+
+    .akkp-float-img img,
+    .lapor-float img {
+        width: 70px;
+    }
+}
+
+/* HP kecil */
+@media (max-width: 480px) {
+    .akkp-float-img img,
+    .lapor-float img {
+        width: 60px;
+    }
+}
+
+/* ================= DETAIL BERITA RESPONSIVE ================= */
+
+/* Gambar */
+.berita-img {
+    max-height: 450px;
+    object-fit: cover;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    /* Judul */
+    h2 {
+        font-size: 20px;
+    }
+
+    /* Konten */
+    .lh-lg {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    /* Gambar lebih kecil */
+    .berita-img {
+        max-height: 250px;
+    }
+
+    /* Card padding */
+    .card-body {
+        padding: 20px !important;
+    }
+
+    /* Sidebar jarak */
+    .col-lg-4 {
+        margin-top: 15px;
+    }
+}
+
+/* HP kecil */
+@media (max-width: 480px) {
+
+    h2 {
+        font-size: 18px;
+    }
+
+    .lh-lg {
+        font-size: 14px;
+    }
+
+    .berita-img {
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* Semua isi footer rata kiri */
+    .footer-bg {
+        text-align: left !important;
+    }
+
+    /* Judul */
+    .footer-title {
+        text-align: left !important;
+        font-size: 18px;
+    }
+
+    /* Text */
+    .footer-text {
+        text-align: left !important;
+        font-size: 16px;
+    }
+
+    /* Menu */
+    .footer-links {
+        text-align: left !important;
+        padding-left: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 8px;
+    }
+
+    /* Map tetap full */
+    .footer-map-wrapper {
+        margin: 0;
+        width: 100%;
+    }
+
+    /* FIX FLEX (biar tidak center) */
+    .footer-bg .d-flex {
+        align-items: flex-start !important;
+    }
+
+    /* Margin kiri tetap ada tapi lebih kecil */
+    .footer-bg .ms-4 {
+        margin-left: 10px !important;
+    }
+
+    /* Logo tetap kiri */
+    .footer-logo-large {
+        margin: 0 0 15px 0;
+        display: block;
+    }
+}
+
 
 /**********************************
     STICKY EFFECT
@@ -771,7 +1004,7 @@ body {
     text-align: left;
     padding-left: 20px;
     line-height: 1.9;
-    font-size: 16px;
+    font-size: 19px;
 }
 
 .tupoksi-list li {

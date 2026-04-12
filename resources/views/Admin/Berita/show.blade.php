@@ -4,7 +4,7 @@
 <div class="container-fluid mt-4">
 
     <!-- Header -->
-    <div class="mb-4 d-flex justify-content-between align-items-center">
+    <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
             <h4 class="fw-bold mb-0">Detail Berita</h4>
             <small class="text-muted">Preview lengkap berita</small>
@@ -17,13 +17,12 @@
     <div class="row g-4">
 
         <!-- Konten Utama -->
-        <div class="col-lg-8">
-
-            <div class="card border-0 shadow-sm rounded-4">
+        <div class="col-12 col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
 
                     <!-- Judul -->
-                    <h2 class="fw-bold mb-3 text-title-dark">
+                    <h2 class="fw-bold mb-3 text-title-dark berita-title">
                         {{ $berita->title }}
                     </h2>
 
@@ -31,25 +30,22 @@
                     @if ($berita->image)
                         <div class="mb-4">
                             <img src="{{ asset($berita->image) }}"
-                                 class="img-fluid rounded-4 w-100"
-                                 style="max-height:450px; object-fit:cover;">
+                                 class="img-fluid rounded-4 w-100 berita-img">
                         </div>
                     @endif
 
                     <!-- Isi -->
-                    <div class="mt-4 lh-lg" style="text-align: justify;">
+                    <div class="mt-4 berita-content">
                         {!! nl2br(e($berita->content)) !!}
                     </div>
 
                 </div>
             </div>
-
         </div>
 
-        <!-- Sidebar Info -->
-        <div class="col-lg-4">
-
-            <div class="card border-0 shadow-sm rounded-4">
+        <!-- Sidebar -->
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
 
                     <h6 class="fw-bold mb-4 text-uppercase text-muted">
@@ -95,7 +91,6 @@
 
                 </div>
             </div>
-
         </div>
 
     </div>

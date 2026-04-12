@@ -22,7 +22,7 @@ class StrukturController extends Controller
 
 
         // Kirim data ke view 'Struktur' (Struktur.blade.php)
-        return view('Struktur', compact('struktur','sections'));
+        return view('struktur', compact('struktur','sections'));
     }
 
     /**

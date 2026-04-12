@@ -139,7 +139,7 @@
                                 <i class="bi bi-diagram-3"></i>
                             </div>
                             <h4 class="tupoksi-title text-title-medium">Fungsi</h4>
-                            <ol class="tupoksi-list" style="text-align:justify;">
+                            <ol class="tupoksi-list" style="text-align:justify; fount-size: 20px;"">
                                 @foreach (explode("\n", $tupoksi->fungsi) as $item)
                                     @if (trim($item) !== '')
                                         <li>{{ $item }}</li>

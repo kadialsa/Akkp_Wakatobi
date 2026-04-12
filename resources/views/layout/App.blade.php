@@ -73,37 +73,78 @@
         <footer class="container-fluid footer-bg text-light mt-5 py-5">
 
             <div class="container">
-            <div class="row gx-5 gy-4 align-items-start">
+                <div class="row gx-5 gy-4">
 
-                <!-- LOGO + CONTACT -->
-                <div class="col-lg-5 col-md-12">
+                    <!-- LOGO + CONTACT -->
+                    <div class="col-lg-5 col-md-12">
 
-                    <div class="d-flex flex-column flex-md-row align-items-start">
+                        <div
+                            class="d-flex flex-column flex-md-row align-items-center align-items-md-start text-center text-md-start">
 
-                        <!-- Logo -->
-                        <img src="{{ asset('img/logo-kkp.png') }}" alt="Logo AKKP" class="footer-logo-large">
+                            <!-- Logo -->
+                            <img src="{{ asset('img/logo-kkp.png') }}" alt="Logo AKKP"
+                                class="footer-logo-large mb-3 mb-md-0">
 
-                        <!-- Contact -->
-                        <div class="ms-4">
+                            <!-- Contact -->
+                            <div class="ms-md-4">
 
-                            <h4 class="footer-title">
-                                Kontak Kami
-                            </h4>
+                                <h4 class="footer-title">
+                                    Kontak Kami
+                                </h4>
 
-                            <p class="footer-text">
-                                <i class="fa fa-map-marker-alt me-2"></i>
-                                Jalan Soekarno Hatta, Matahora, Wakatobi
-                            </p>
+                                <p class="footer-text">
+                                    <i class="fa fa-map-marker-alt me-2"></i>
+                                    Jalan Soekarno Hatta, Matahora, Wakatobi
+                                </p>
 
-                            <p class="footer-text">
-                                <i class="fa fa-phone-alt me-2"></i>
-                                +62 xxx xxxx xxxx
-                            </p>
+                                <p class="footer-text">
+                                    <i class="fa fa-phone-alt me-2"></i>
+                                    +62 xxx xxxx xxxx
+                                </p>
 
-                            <p class="footer-text">
-                                <i class="fa fa-envelope me-2"></i>
-                                akkpwakatobi@kkp.go.id
-                            </p>
+                                <p class="footer-text">
+                                    <i class="fa fa-envelope me-2"></i>
+                                    akkpwakatobi@kkp.go.id
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MENU WEBSITE -->
+                    <div class="col-lg-3 col-md-6 col-6">
+
+                        <h4 class="footer-title">
+                            Menu Website
+                        </h4>
+
+                        <ul class="footer-links list-unstyled">
+
+                            <li><a href="{{ route('home.index') }}">Beranda</a></li>
+                            <li><a href="{{ route('about.index') }}">Profil</a></li>
+                            <li><a href="{{ route('berita.index') }}">Berita</a></li>
+                            <li><a href="{{ route('video.user') }}">Video</a></li>
+                            <li><a href="{{ route('contact') }}">Kontak</a></li>
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- LOKASI -->
+                    <div class="col-lg-4 col-md-6 col-12">
+
+                        <h4 class="footer-title text-center text-md-start">
+                            Lokasi Kampus
+                        </h4>
+
+                        <div class="footer-map-wrapper mx-auto mx-md-0">
+
+                            <iframe src="https://www.google.com/maps?q=AKKP%20Wakatobi&output=embed" loading="lazy">
+                            </iframe>
 
                         </div>
 
@@ -112,81 +153,17 @@
                 </div>
 
 
-                <!-- MENU WEBSITE -->
-                <div class="col-lg-3 col-md-6">
+                <!-- COPYRIGHT -->
+                <div class="border-top border-secondary mt-5 pt-4 text-center small">
 
-                    <h4 class="footer-title">
-                        Menu Website
-                    </h4>
-
-                    <ul class="footer-links list-unstyled">
-
-                        <li>
-                            <a href="{{ route('home.index') }}">
-                                Beranda
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('about.index') }}">
-                                Profil
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('berita.index') }}">
-                                Berita
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('video.user') }}">
-                                Video
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="{{ route('contact') }}">
-                                Kontak
-                            </a>
-                        </li>
-
-                    </ul>
+                    © {{ date('Y') }}
+                    <strong>AKKP Wakatobi</strong>. All Rights Reserved
 
                 </div>
-
-
-                <!-- LOKASI -->
-                <div class="col-lg-4 col-md-6">
-
-                    <h4 class="footer-title">
-                        Lokasi Kampus
-                    </h4>
-
-                    <div class="footer-map-wrapper">
-
-                        <iframe src="https://www.google.com/maps?q=AKKP%20Wakatobi&output=embed" loading="lazy">
-                        </iframe>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- COPYRIGHT -->
-            <div class="border-top border-secondary mt-5 pt-4 text-center small">
-
-                © {{ date('Y') }}
-                <strong>AKKP Wakatobi</strong>. All Rights Reserved
 
             </div>
 
         </footer>
-
-
-
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
