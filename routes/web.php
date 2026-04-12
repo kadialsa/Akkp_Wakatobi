@@ -23,11 +23,12 @@ use Illuminate\Support\Facades\Auth;
 |--------------------------------------------------------------------------
 */
 
+// Route::get('/ekowisata', [EkowisataController::class, 'index'])->name('ekowisata.index');
+// Route::get('/konservasi', [KonservasiController::class, 'index'])->name('konservasi.index');
+
 // Halaman utama & statis
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
-Route::get('/ekowisata', [EkowisataController::class, 'index'])->name('ekowisata.index');
-Route::get('/konservasi', [KonservasiController::class, 'index'])->name('konservasi.index');
 Route::get('/struktur', [StrukturController::class, 'index'])->name('struktur.index');
 
 // Berita publik
