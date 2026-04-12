@@ -20,7 +20,7 @@ class AboutController extends Controller
         $visimisi = VisiMisi::first();
         $tupoksi = Tupoksi::first();
 
-        return view('about', compact('about', 'visimisi', 'sejarah','tupoksi'));
+        return view('About', compact('about', 'visimisi', 'sejarah','tupoksi'));
     }
 
     /**

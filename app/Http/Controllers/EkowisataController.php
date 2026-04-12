@@ -20,7 +20,7 @@ class EkowisataController extends Controller
     public function index()
     {
 
-        return view('ekowisata', [
+        return view('Ekowisata', [
         'sejarah'   => EkowisataProfile::first(),
         'kaprodi'   => EkowisataKaprodi::first(),
 
