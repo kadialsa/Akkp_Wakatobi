@@ -1,0 +1,9 @@
+deployment:
+  tasks:
+    - cd /home/akkpwaka/repositories/profil.akkpwakatobi.ac.id
+    - /bin/cp -r * /home/akkpwaka/profil.akkpwakatobi.ac.id
+    - /bin/cp -r app /home/akkpwaka/profil.akkpwakatobi.ac.id
+    - /bin/cp -r bootstrap /home/akkpwaka/profil.akkpwakatobi.ac.id
+    - /bin/cp -r config /home/akkpwaka/profil.akkpwakatobi.ac.id
+    - /bin/cp -r resources /home/akkpwaka/profil.akkpwakatobi.ac.id
+    - /bin/cp -r routes /home/akkpwaka/profil.akkpwakatobi.ac.id
