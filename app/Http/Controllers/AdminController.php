@@ -113,7 +113,7 @@ class AdminController extends Controller
             'counts' => $visitorDataRaw->pluck('count')->toArray()
         ];
 
-        return view('A~dmin.index', compact(
+        return view('Admin.index', compact(
             'cooperations',
             'sliders',
             'about',
