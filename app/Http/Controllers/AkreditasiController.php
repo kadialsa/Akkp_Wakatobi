@@ -15,7 +15,7 @@ class AkreditasiController extends Controller
     {
         $akreditas = Akreditasi::latest()->paginate(10);
 
-        return view('admin.akreditasi.index', compact('akreditas'));
+        return view('Admin.Akreditasi.index', compact('akreditas'));
     }
 
 
@@ -24,7 +24,7 @@ class AkreditasiController extends Controller
     // ===============================
     public function create()
     {
-        return view('admin.akreditasi.create');
+        return view('Admin.Akreditasi.create');
     }
 
 
@@ -104,7 +104,7 @@ class AkreditasiController extends Controller
     {
         $akreditasi = Akreditasi::findOrFail($id);
 
-        return view('admin.akreditasi.show', compact('akreditasi'));
+        return view('Admin.Akreditasi.show', compact('akreditasi'));
     }
 
 
@@ -114,7 +114,7 @@ class AkreditasiController extends Controller
     public function edit($id)
     {
         $data = Akreditasi::findOrFail($id);
-        return view('admin.akreditasi.edit', compact('data'));
+        return view('Admin.Akreditasi.edit', compact('data'));
     }
 
     // ===============================

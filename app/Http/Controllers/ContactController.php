@@ -47,7 +47,7 @@ class ContactController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('admin.contact.index', compact('messages'));
+        return view('Admin.Contact.index', compact('messages'));
     }
 
 
@@ -63,7 +63,7 @@ class ContactController extends Controller
 
         $message = DB::table('contact_messages')->find($id);
 
-        return view('admin.contact.show', compact('message'));
+        return view('Admin.Contact.show', compact('message'));
     }
 
 

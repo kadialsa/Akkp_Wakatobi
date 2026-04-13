@@ -18,7 +18,7 @@ class ProdiController extends Controller
     public function index()
     {
         $prodis = Prodi::latest()->get();
-        return view('admin.prodi.index', compact('prodis'));
+        return view('Admin.Prodi.index', compact('prodis'));
     }
 
     /*
@@ -28,7 +28,7 @@ class ProdiController extends Controller
     */
     public function create()
     {
-        return view('admin.prodi.create');
+        return view('Admin.Prodi.create');
     }
 
     /*
@@ -162,7 +162,7 @@ public function store(Request $request)
     public function edit($id)
     {
         $prodi = Prodi::with('misi')->findOrFail($id);
-        return view('admin.prodi.edit', compact('prodi'));
+        return view('Admin.Prodi.edit', compact('prodi'));
     }
 
     /*

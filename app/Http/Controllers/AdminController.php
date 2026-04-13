@@ -113,7 +113,7 @@ class AdminController extends Controller
             'counts' => $visitorDataRaw->pluck('count')->toArray()
         ];
 
-        return view('Admin.index', compact(
+        return view('A~dmin.index', compact(
             'cooperations',
             'sliders',
             'about',
@@ -146,7 +146,7 @@ class AdminController extends Controller
     public function aboutEdit()
     {
         $about = About::first(); // Ambil data pertama
-        return view('admin.about', compact('about'));
+        return view('Admin.About', compact('about'));
     }
 
     public function aboutUpdate(Request $request, $id)
@@ -202,12 +202,12 @@ class AdminController extends Controller
     public function coperation_index()
     {
         $items = Cooperation::orderBy('position')->get();
-        return view('admin.cooperation', compact('items'));
+        return view('Admin.Cooperation', compact('items'));
     }
 
     public function cooperation_create()
     {
-        return view('admin.cooperation-add');
+        return view('Admin.Cooperation-add');
     }
 
     public function cooperation_store(Request $request)
@@ -231,7 +231,7 @@ class AdminController extends Controller
 
     public function cooperation_edit(Cooperation $cooperation)
     {
-        return view('admin.cooperation-edit', compact('cooperation'));
+        return view('Admin.Coperation-edit', compact('cooperation'));
     }
 
     public function cooperation_update(Request $request, Cooperation $cooperation)
@@ -276,7 +276,7 @@ class AdminController extends Controller
             ]
         );
 
-        return view('admin.VisiMisi', compact('visimisi'));
+        return view('Admin.VisiMisi', compact('visimisi'));
     }
 
     public function visiMisiUpdate(Request $request)
@@ -303,7 +303,7 @@ class AdminController extends Controller
     public function sejarahEdit()
     {
         $sejarah = Sejarah::first();
-        return view('admin.sejarah', compact('sejarah'));
+        return view('Admin.Sejarah', compact('sejarah'));
     }
 
     public function sejarahUpdate(Request $request)
@@ -338,7 +338,7 @@ class AdminController extends Controller
     public function tupoksiEdit()
     {
         $tupoksi = Tupoksi::first();
-        return view('admin.tupoksi', compact('tupoksi'));
+        return view('Admin.Tupoksi', compact('tupoksi'));
     }
 
     // update
@@ -367,7 +367,7 @@ class AdminController extends Controller
     public function strukturEdit()
     {
         $struktur = StrukturOrganisasi::first();
-        return view('admin.StrukturOrganisasi', compact('struktur'));
+        return view('Admin.StrukturOrganisasi', compact('struktur'));
     }
 
     public function strukturUpdate(Request $request)
@@ -404,12 +404,12 @@ class AdminController extends Controller
     public function section_index()
     {
         $sections = Section::with('leaders')->get();
-        return view('admin.sections.index', compact('sections'));
+        return view('Admin.Sections.Index', compact('sections'));
     }
 
     public function section_create()
     {
-        return view('admin.sections.create');
+        return view('Admin.Sections.Create');
     }
 
     public function section_store(Request $request)
@@ -429,7 +429,7 @@ class AdminController extends Controller
 
     public function section_edit(Section $section)
     {
-        return view('admin.sections.edit', compact('section'));
+        return view('Admin.Sections.Edit', compact('section'));
     }
 
     public function section_update(Request $request, Section $section)
@@ -459,7 +459,7 @@ class AdminController extends Controller
 
     public function leader_create(Section $section)
     {
-        return view('admin.sections.leader-create', compact('section'));
+        return view('Admin.Sections.leader-create', compact('section'));
     }
 
     public function leader_Store(Request $request)
@@ -494,7 +494,7 @@ class AdminController extends Controller
 
     public function leader_edit(Leader $leader)
     {
-        return view('admin.sections.leader-edit', compact('leader'));
+        return view('Admin.Sections.leader-edit', compact('leader'));
     }
 
 
@@ -584,7 +584,7 @@ class AdminController extends Controller
     public function beritaIndex()
     {
         $beritas = Berita::latest()->paginate(9);
-        return view('admin.berita.index', compact('beritas'));
+        return view('Admin.Berita.index', compact('beritas'));
     }
 
     // ===============================
@@ -592,7 +592,7 @@ class AdminController extends Controller
     // ===============================
     public function beritaCreate()
     {
-        return view('admin.berita.create');
+        return view('Admin.Berita.create');
     }
 
     // ===============================
@@ -637,7 +637,7 @@ class AdminController extends Controller
     public function beritaEdit($id)
     {
         $berita = Berita::findOrFail($id);
-        return view('admin.berita.edit', compact('berita'));
+        return view('Admin.Berita.edit', compact('berita'));
     }
 
     // ===============================
@@ -683,7 +683,7 @@ class AdminController extends Controller
     public function beritaShow($id)
     {
         $berita = Berita::findOrFail($id);
-        return view('admin.berita.show', compact('berita'));
+        return view('Admin.Berita.show', compact('berita'));
     }
 
     public function beritaDestroy($id)
@@ -740,13 +740,13 @@ class AdminController extends Controller
     {
         $videos = Video::latest()->get();
 
-        return view('admin.video.index', compact('videos'));
+        return view('Admin.Video.index', compact('videos'));
     }
 
 
     public function videoCreate()
     {
-        return view('admin.video.create');
+        return view('Admin.Video.create');
     }
 
 
@@ -772,7 +772,7 @@ class AdminController extends Controller
     {
         $video = Video::findOrFail($id);
 
-        return view('admin.video.edit', compact('video'));
+        return view('Admin.Video.edit', compact('video'));
     }
 
 
@@ -825,7 +825,7 @@ class AdminController extends Controller
             ]);
         }
 
-        return view('admin.header', compact('header'));
+        return view('Admin.Header', compact('header'));
     }
 
 

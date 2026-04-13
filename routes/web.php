@@ -60,7 +60,7 @@ Route::middleware(['authadmin'])->prefix('admin')->name('admin.')->group(functio
     // Dashboard
     Route::get('/', [AdminController::class, 'index'])->name('index');
 
-    // About
+    // About/sambutan
     Route::get('/about', [AdminController::class, 'aboutEdit'])->name('about.edit');
     Route::put('/about/{id}', [AdminController::class, 'aboutUpdate'])->name('about.update');
 
