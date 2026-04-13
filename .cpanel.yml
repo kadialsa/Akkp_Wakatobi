@@ -8,6 +8,8 @@ deployment:
       /home/akkpwaka/repositories/profil.akkpwakatobi.ac.id/ \
       /home/akkpwaka/profil.akkpwakatobi.ac.id/
 
+      - rsync -av --exclude='uploads' public/ /home/akkpwaka/public_html/profil/
+
     - rsync -av --delete \
       --exclude='index.php' \
       /home/akkpwaka/repositories/profil.akkpwakatobi.ac.id/public/ \
