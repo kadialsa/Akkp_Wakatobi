@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\EkowisataController;
-use App\Http\Controllers\KonservasiController;
 use App\Http\Controllers\StrukturController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\AdminController;

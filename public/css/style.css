@@ -228,7 +228,7 @@ body {
 
     /* Logo lebih kecil */
     .navbar .navbar-brand img {
-        height: 60px !important;
+        height: 50px !important;
     }
 
     /* Menu jadi full width & rapi */
@@ -1626,8 +1626,8 @@ body {
     z-index: 9999;
     display: block;
     transition: all 0.3s ease;
-    background: #ffffff;
-    border-radius: 15px;
+    /* background: #ffffff; */
+    /* border-radius: 15px; */
 
 }
 
@@ -1635,7 +1635,7 @@ body {
     width: 90px;   /* bisa ubah ukuran */
     height: auto;
     border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    /* box-shadow: 0 8px 20px rgba(0,0,0,0.2); */
 }
 
 .akkp-float-img:hover {

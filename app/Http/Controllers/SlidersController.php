@@ -22,7 +22,7 @@ class SlidersController extends Controller
 
         $sliders = $query->paginate(10);
 
-        return view('Admin.slides', compact('sliders'));
+        return view('Admin.Slides', compact('sliders'));
     }
 
     /**
