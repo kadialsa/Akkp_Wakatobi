@@ -172,7 +172,7 @@
             <img src="{{ asset('img/lapor.jpg') }}" alt="LAPOR!">
         </a>
 
-        <a href="/akkp-hebat" class="akkp-float-img" target="_blank">
+        <a href="/akkp-hebat" class="akkp-float-img" onclick="return false;">
             <img src="{{ asset('img/AKKP-HEBAT.png') }}" alt="AKKP Hebat">
         </a>
 
