@@ -1632,7 +1632,7 @@ body {
 }
 
 .akkp-float-img img {
-    width: 90px;   /* bisa ubah ukuran */
+    width: 80px;   /* bisa ubah ukuran */
     height: auto;
     border-radius: 15px;
     /* box-shadow: 0 8px 20px rgba(0,0,0,0.2); */
