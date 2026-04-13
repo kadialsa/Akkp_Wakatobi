@@ -1,4 +1,4 @@
-@extends('layout.admin')
+@extends('layout.Admin')
 
 @section('content')
     <div class="container-fluid mt-4">
@@ -51,7 +51,7 @@
                                 </small>
                             </div>
 
-                            
+
                             <!-- Preview Lebih Besar -->
                             <div class="text-center mb-3">
 

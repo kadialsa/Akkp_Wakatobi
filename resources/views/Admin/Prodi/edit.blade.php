@@ -1,4 +1,4 @@
-@extends('layout.admin')
+@extends('layout.Admin')
 
 @section('content')
     <div class="container-fluid mt-4">
@@ -326,5 +326,5 @@
             }
         }
     </script>
-    
+
 @endsection
