@@ -36,5 +36,7 @@ if (!function_exists('uploadFile')) {
         } catch (\Throwable $e) {
             return null;
         }
+
     }
+    
 }
