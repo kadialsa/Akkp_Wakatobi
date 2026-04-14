@@ -80,7 +80,7 @@
                         <div>
 
                             @if ($sejarah->foto)
-                                <img id="previewFoto" src="{{ asset('uploads/sejarah/' . $sejarah->foto) }}"
+                                <img id="previewFoto" src="{{ url('/uploads/sejarah/' . $sejarah->foto) }}"
                                     style="width:250px;height:160px;object-fit:cover;border-radius:10px;"
                                     class="shadow-sm border">
                             @else
