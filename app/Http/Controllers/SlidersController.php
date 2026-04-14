@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+require_once app_path('Helpers/helpers.php');
+
 use App\Models\Sliders;
 use Illuminate\Http\Request;
 
