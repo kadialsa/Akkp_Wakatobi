@@ -7,15 +7,13 @@ use Illuminate\Http\Request;
 
 class SlidersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // ========================
+    // INDEX
+    // ========================
     public function index(Request $request)
     {
-
         $query = Sliders::orderBy('position');
 
-        // Jika ada fitur search
         if ($request->search) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
@@ -25,17 +23,17 @@ class SlidersController extends Controller
         return view('Admin.Slides', compact('sliders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // ========================
+    // CREATE
+    // ========================
     public function create()
     {
         return view('Admin.Slide-add');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // ========================
+    // STORE
+    // ========================
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -46,40 +44,40 @@ class SlidersController extends Controller
             'position'    => 'nullable|integer',
         ]);
 
+        // 🔥 Upload pakai helper
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/sliders'), $filename);
-            $data['image'] = $filename;
+
+            $file = $request->file('image');
+
+            if ($file && $file->isValid()) {
+
+                $imageName = uploadFile($file, 'sliders');
+
+                if (!$imageName) {
+                    return back()->with('error', 'Gagal upload gambar');
+                }
+
+                $data['image'] = $imageName;
+            }
         }
 
         Sliders::create($data);
 
         return redirect()->route('admin.slides.index')
-            ->with('status', 'Slider berhasil ditambahkan');
+            ->with('success', 'Slider berhasil ditambahkan');
     }
 
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Sliders $sliders)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+    // ========================
+    // EDIT
+    // ========================
     public function edit(Sliders $slider)
     {
         return view('Admin.Slide-edit', compact('slider'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // ========================
+    // UPDATE
+    // ========================
     public function update(Request $request, Sliders $slider)
     {
         $data = $request->validate([
@@ -90,45 +88,44 @@ class SlidersController extends Controller
             'position'    => 'nullable|integer',
         ]);
 
-        // jika upload gambar baru
+        // 🔥 Upload + replace pakai helper
         if ($request->hasFile('image')) {
 
-            // hapus gambar lama
-            $oldImage = public_path('uploads/sliders/' . $slider->image);
-            if (file_exists($oldImage)) {
-                unlink($oldImage);
+            $file = $request->file('image');
+
+            if ($file && $file->isValid()) {
+
+                $imageName = uploadFile(
+                    $file,
+                    'sliders',
+                    $slider->image // 🔥 hapus file lama otomatis
+                );
+
+                if (!$imageName) {
+                    return back()->with('error', 'Gagal upload gambar');
+                }
+
+                $data['image'] = $imageName;
             }
-
-            // upload gambar baru
-            $image = $request->file('image');
-            $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/sliders'), $filename);
-
-            $data['image'] = $filename;
         }
 
         $slider->update($data);
 
         return redirect()->route('admin.slides.index')
-            ->with('status', 'Slider berhasil diperbarui');
+            ->with('success', 'Slider berhasil diperbarui');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    // ========================
+    // DELETE
+    // ========================
     public function destroy(Sliders $slider)
     {
-        // hapus file gambar jika ada
-        $imagePath = public_path('uploads/sliders/' . $slider->image);
-        if (file_exists($imagePath)) {
-            unlink($imagePath);
-        }
+        // 🔥 delete pakai helper
+        deleteFile($slider->image, 'sliders');
 
-        // hapus data dari database
         $slider->delete();
 
         return redirect()->route('admin.slides.index')
-            ->with('status', 'Slider berhasil dihapus');
+            ->with('success', 'Slider berhasil dihapus');
     }
 }

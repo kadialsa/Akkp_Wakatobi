@@ -35,7 +35,6 @@ if (!function_exists('uploadFile')) {
     }
 }
 
-
 if (!function_exists('deleteFile')) {
 
     function deleteFile($fileName, $folder)
