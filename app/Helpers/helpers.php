@@ -9,7 +9,7 @@ if (!function_exists('uploadFile')) {
         try {
 
             // ✅ PATH AMAN (tanpa app())
-            $basePath = public_path('uploads/' . $folder);
+            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $folder;
 
             // buat folder jika belum ada
             if (!is_dir($basePath)) {
