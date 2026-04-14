@@ -148,59 +148,36 @@ class AdminController extends Controller
         $about = About::first(); // Ambil data pertama
         return view('Admin.About', compact('about'));
     }
-
     public function aboutUpdate(Request $request, $id)
-{
-    $about = About::findOrFail($id);
+    {
+        $about = About::findOrFail($id);
 
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'title' => 'required|string|max:255',
-        'description' => 'required',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048|dimensions:min_width=400,min_height=500',
-    ], [
-        'name.required' => 'Nama direktur wajib diisi.',
-        'title.required' => 'Jabatan wajib diisi.',
-        'description.required' => 'Deskripsi sambutan wajib diisi.',
-        'image.image' => 'File harus berupa gambar.',
-        'image.mimes' => 'Format gambar harus JPG atau PNG.',
-        'image.max' => 'Ukuran gambar maksimal 2MB.',
-        'image.dimensions' => 'Ukuran gambar minimal 400 x 500 px.'
-    ]);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    $data = $request->only(['name', 'title', 'description']);
+        $data = $request->only(['name', 'title', 'description']);
 
-    // 🔥 PATH FIX (WAJIB untuk cPanel kamu)
-    $path = '/home/akkpwaka/public_html/profil/uploads/about';
+        // 🔥 Upload gambar pakai helper
+        if ($request->hasFile('image')) {
+            $imageName = uploadFile(
+                $request->file('image'),
+                'about',
+                $about->image // otomatis hapus lama
+            );
 
-    // Pastikan folder ada
-    if (!file_exists($path)) {
-        mkdir($path, 0775, true);
-        chmod($path, 0775);
-    }
-
-    // Upload gambar jika ada
-    if ($request->hasFile('image')) {
-
-        // Hapus gambar lama
-        if ($about->image && file_exists($path . '/' . $about->image)) {
-            unlink($path . '/' . $about->image);
+            if ($imageName) {
+                $data['image'] = $imageName;
+            }
         }
 
-        $image = $request->file('image');
+        $about->update($data);
 
-        $imageName = time() . '_' . \Illuminate\Support\Str::random(10) . '.' . $image->getClientOriginalExtension();
-
-        // Pindahkan ke folder PUBLIC HTML (bukan public Laravel)
-        $image->move($path, $imageName);
-
-        $data['image'] = $imageName;
+        return back()->with('success', 'Data berhasil diperbarui');
     }
-
-    $about->update($data);
-
-    return redirect()->back()->with('success', 'Data Sambutan Direktur berhasil diperbarui.');
-}
 
     // Kerjasama
     public function coperation_index()
