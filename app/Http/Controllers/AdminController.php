@@ -308,11 +308,11 @@ class AdminController extends Controller
         return back()->with('success', 'Data berhasil dihapus');
     }
 
-    // Visi Misi
+    // visi dan misi
     public function visiMisiEdit()
     {
         $visimisi = VisiMisi::firstOrCreate(
-            [], // kondisi kosong = ambil data pertama
+            [],
             [
                 'visi' => '',
                 'misi' => '',
@@ -331,7 +331,6 @@ class AdminController extends Controller
 
         $visimisi = VisiMisi::firstOrFail();
 
-        // Gabungkan misi array menjadi text
         $misiText = implode("\n", $request->misi);
 
         $visimisi->update([
@@ -339,7 +338,7 @@ class AdminController extends Controller
             'misi' => $misiText,
         ]);
 
-        return back()->with('success', 'Visi & Misi berhasil diperbaruhi!!');
+        return back()->with('success', 'Visi & Misi berhasil diperbarui!');
     }
 
     // sejarah
@@ -351,28 +350,39 @@ class AdminController extends Controller
 
     public function sejarahUpdate(Request $request)
     {
-        $sejarah = Sejarah::firstOrFail(); // ⬅️ AMBIL YANG SUDAH ADA
+        $sejarah = Sejarah::firstOrFail();
 
         $request->validate([
             'sejarah' => 'required',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // upload foto
+        $data = [
+            'sejarah' => $request->sejarah,
+        ];
+
+        // 🔥 pakai helper
         if ($request->hasFile('foto')) {
 
-            if ($sejarah->foto && file_exists(public_path('uploads/sejarah/' . $sejarah->foto))) {
-                unlink(public_path('uploads/sejarah/' . $sejarah->foto));
-            }
+            $file = $request->file('foto');
 
-            $filename = time() . '.' . $request->foto->extension();
-            $request->foto->move(public_path('uploads/sejarah'), $filename);
-            $sejarah->foto = $filename;
+            if ($file && $file->isValid()) {
+
+                $imageName = uploadFile(
+                    $file,
+                    'sejarah',
+                    $sejarah->foto // auto hapus lama
+                );
+
+                if (!$imageName) {
+                    return back()->with('error', 'Gagal upload gambar');
+                }
+
+                $data['foto'] = $imageName;
+            }
         }
 
-        // UPDATE DATA LAMA
-        $sejarah->sejarah = $request->sejarah;
-        $sejarah->save();
+        $sejarah->update($data);
 
         return back()->with('success', 'Sejarah berhasil diperbarui');
     }
@@ -384,18 +394,16 @@ class AdminController extends Controller
         return view('Admin.Tupoksi', compact('tupoksi'));
     }
 
-    // update
     public function tupoksiUpdate(Request $request)
     {
         $tupoksi = Tupoksi::firstOrFail();
 
         $request->validate([
             'tugas_pokok' => 'required',
-            'fungsi' => 'required|array', // validasi sebagai array
-            'fungsi.*' => 'required|string', // setiap item wajib diisi
+            'fungsi' => 'required|array',
+            'fungsi.*' => 'required|string',
         ]);
 
-        // simpan sebagai newline-separated string
         $fungsiText = implode("\n", $request->fungsi);
 
         $tupoksi->update([
