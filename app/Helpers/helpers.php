@@ -1,5 +1,7 @@
 <?php
 
+require_once app_path('Helpers/file_helper.php');
+
 use Illuminate\Support\Str;
 
 if (!function_exists('uploadFile')) {
