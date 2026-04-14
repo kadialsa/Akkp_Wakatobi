@@ -148,6 +148,7 @@ class AdminController extends Controller
         $about = About::first(); // Ambil data pertama
         return view('Admin.About', compact('about'));
     }
+
     public function aboutUpdate(Request $request, $id)
     {
         $about = About::findOrFail($id);
@@ -161,15 +162,23 @@ class AdminController extends Controller
 
         $data = $request->only(['name', 'title', 'description']);
 
-        // 🔥 Upload gambar pakai helper
+        // 🔥 MODE NORMAL (PRODUCTION)
         if ($request->hasFile('image')) {
-            $imageName = uploadFile(
-                $request->file('image'),
-                'about',
-                $about->image // otomatis hapus lama
-            );
 
-            if ($imageName) {
+            $file = $request->file('image');
+
+            if ($file->isValid()) {
+
+                $imageName = uploadFile(
+                    $file,
+                    'about',
+                    $about->image
+                );
+
+                if (!$imageName) {
+                    return back()->with('error', 'Gagal upload gambar');
+                }
+
                 $data['image'] = $imageName;
             }
         }
@@ -178,6 +187,7 @@ class AdminController extends Controller
 
         return back()->with('success', 'Data berhasil diperbarui');
     }
+
 
     // Kerjasama
     public function coperation_index()
