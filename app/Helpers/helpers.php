@@ -25,7 +25,7 @@ if (!function_exists('uploadFile')) {
                 unlink($basePath . '/' . $oldFile);
             }
 
-            // 🔥 Nama unik (lebih rapi pakai Str)
+            // 🔥 Nama unik
             $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
 
             // 🔥 Upload
@@ -36,7 +36,34 @@ if (!function_exists('uploadFile')) {
         } catch (\Throwable $e) {
             return null;
         }
-
     }
-    
+}
+
+
+// ✅ TAMBAHAN INI
+if (!function_exists('deleteFile')) {
+
+    function deleteFile($fileName, $folder)
+    {
+        try {
+
+            if (!$fileName) return;
+
+            // 🔥 SAMAKAN PATH dengan uploadFile
+            if (app()->environment('local')) {
+                $basePath = public_path('uploads/' . $folder);
+            } else {
+                $basePath = '/home/akkpwaka/public_html/profil/uploads/' . $folder;
+            }
+
+            $filePath = $basePath . '/' . $fileName;
+
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+
+        } catch (\Throwable $e) {
+            // optional: log error
+        }
+    }
 }

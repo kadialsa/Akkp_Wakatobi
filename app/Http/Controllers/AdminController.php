@@ -196,61 +196,111 @@ class AdminController extends Controller
         return view('Admin.Cooperation', compact('items'));
     }
 
+    // ========================
+    // CREATE
+    // ========================
     public function cooperation_create()
     {
         return view('Admin.Cooperation-add');
     }
 
+    // ========================
+    // STORE
+    // ========================
     public function cooperation_store(Request $request)
     {
         $request->validate([
             'image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
         ]);
 
-        $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('uploads/cooperation'), $imageName);
-
-        Cooperation::create([
-            'image' => $imageName,
+        $data = [
             'position' => $request->position ?? 0,
             'is_active' => $request->is_active ?? 1,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+
+            $file = $request->file('image');
+
+            if ($file && $file->isValid()) {
+
+                $imageName = uploadFile($file, 'cooperation');
+
+                if (!$imageName) {
+                    return back()->with('error', 'Gagal upload gambar');
+                }
+
+                $data['image'] = $imageName;
+            } else {
+                return back()->with('error', 'File tidak valid');
+            }
+        }
+
+        Cooperation::create($data);
 
         return redirect()->route('admin.cooperation.index')
             ->with('success', 'Data berhasil ditambahkan');
     }
 
-    public function cooperation_edit(Cooperation $cooperation)
+    // ========================
+    // EDIT
+    // ========================
+    public function cooperation_edit($id)
     {
-        return view('Admin.Coperation-edit', compact('cooperation'));
+        $cooperation = Cooperation::findOrFail($id);
+
+        return view('Admin.Cooperation-edit', compact('cooperation'));
     }
 
-    public function cooperation_update(Request $request, Cooperation $cooperation)
+    // ========================
+    // UPDATE
+    // ========================
+    public function cooperation_update(Request $request, $id)
     {
+        $cooperation = Cooperation::findOrFail($id);
+
+        $request->validate([
+            'image' => 'nullable|image|mimes:png,jpg,jpeg|max:2048'
+        ]);
+
+        $data = [
+            'position' => $request->position ?? 0,
+            'is_active' => $request->is_active,
+        ];
+
         if ($request->hasFile('image')) {
-            if ($cooperation->image && file_exists(public_path('uploads/cooperation/' . $cooperation->image))) {
-                unlink(public_path('uploads/cooperation/' . $cooperation->image));
+
+            $file = $request->file('image');
+
+            if ($file && $file->isValid()) {
+
+                $imageName = uploadFile(
+                    $file,
+                    'cooperation',
+                    $cooperation->image
+                );
+
+                if (!$imageName) {
+                    return back()->with('error', 'Gagal upload gambar');
+                }
+
+                $data['image'] = $imageName;
             }
-
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('uploads/cooperation'), $imageName);
-
-            // ⬅️ SIMPAN KE MODEL
-            $cooperation->image = $imageName;
         }
 
-        $cooperation->position = $request->position;
-        $cooperation->is_active = $request->is_active;
-        $cooperation->save(); // ⬅️ PENTING
+        $cooperation->update($data);
 
         return redirect()->route('admin.cooperation.index')
-            ->with('success', 'Data berhasil diupdate');
+            ->with('success', 'Data berhasil diperbarui');
     }
 
-
+    // ========================
+    // DELETE
+    // ========================
     public function cooperation_destroy(Cooperation $cooperation)
     {
-        @unlink(public_path('uploads/cooperation/' . $cooperation->image));
+        deleteFile($cooperation->image, 'cooperation');
+
         $cooperation->delete();
 
         return back()->with('success', 'Data berhasil dihapus');

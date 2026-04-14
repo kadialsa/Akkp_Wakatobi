@@ -28,6 +28,12 @@
         <!-- Card -->
         <div class="card border-0 shadow-sm">
 
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="card-body">
 
                 <form action="{{ route('admin.cooperation.update', $cooperation->id) }}" method="POST"
@@ -97,11 +103,13 @@
 
                             <select name="is_active" class="form-select">
 
-                                <option value="1" {{ old('is_active', $cooperation->is_active) == 1 ? 'selected' : '' }}>
+                                <option value="1"
+                                    {{ old('is_active', $cooperation->is_active) == 1 ? 'selected' : '' }}>
                                     Aktif
                                 </option>
 
-                                <option value="0" {{ old('is_active', $cooperation->is_active) == 0 ? 'selected' : '' }}>
+                                <option value="0"
+                                    {{ old('is_active', $cooperation->is_active) == 0 ? 'selected' : '' }}>
                                     Nonaktif
                                 </option>
 
