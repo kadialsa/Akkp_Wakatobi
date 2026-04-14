@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+require_once app_path('Helpers/helpers.php');
+
 use App\Models\About;
 use App\Models\Akreditasi;
 use App\Models\Berita;

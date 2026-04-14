@@ -1,7 +1,5 @@
 <?php
 
-require_once app_path('Helpers/file_helper.php');
-
 use Illuminate\Support\Str;
 
 if (!function_exists('uploadFile')) {
@@ -10,27 +8,23 @@ if (!function_exists('uploadFile')) {
     {
         try {
 
-            // 🔥 DETEKSI PATH
-            if (app()->environment('local')) {
-                $basePath = public_path('uploads/' . $folder);
-            } else {
-                $basePath = '/home/akkpwaka/public_html/profil/uploads/' . $folder;
-            }
+            // ✅ PATH AMAN (tanpa app())
+            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $folder;
 
-            // 🔥 Buat folder jika belum ada
+            // buat folder jika belum ada
             if (!is_dir($basePath)) {
                 mkdir($basePath, 0755, true);
             }
 
-            // 🔥 Hapus file lama
+            // hapus file lama
             if ($oldFile && file_exists($basePath . '/' . $oldFile)) {
                 unlink($basePath . '/' . $oldFile);
             }
 
-            // 🔥 Nama unik
+            // nama file unik
             $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
 
-            // 🔥 Upload
+            // upload file
             $file->move($basePath, $fileName);
 
             return $fileName;
@@ -42,7 +36,6 @@ if (!function_exists('uploadFile')) {
 }
 
 
-// ✅ TAMBAHAN INI
 if (!function_exists('deleteFile')) {
 
     function deleteFile($fileName, $folder)
@@ -51,13 +44,7 @@ if (!function_exists('deleteFile')) {
 
             if (!$fileName) return;
 
-            // 🔥 SAMAKAN PATH dengan uploadFile
-            if (app()->environment('local')) {
-                $basePath = public_path('uploads/' . $folder);
-            } else {
-                $basePath = '/home/akkpwaka/public_html/profil/uploads/' . $folder;
-            }
-
+            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $folder;
             $filePath = $basePath . '/' . $fileName;
 
             if (file_exists($filePath)) {
@@ -65,7 +52,7 @@ if (!function_exists('deleteFile')) {
             }
 
         } catch (\Throwable $e) {
-            // optional: log error
+            // optional
         }
     }
 }
