@@ -347,41 +347,39 @@ class AdminController extends Controller
         $sejarah = Sejarah::first();
         return view('Admin.Sejarah', compact('sejarah'));
     }
-
     public function sejarahUpdate(Request $request)
     {
         $sejarah = Sejarah::firstOrFail();
 
+        // ✅ Validasi
         $request->validate([
             'sejarah' => 'required',
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        // ✅ Data awal
         $data = [
             'sejarah' => $request->sejarah,
         ];
 
-        // 🔥 pakai helper
+        // 🔥 Upload gambar pakai helper
         if ($request->hasFile('foto')) {
 
-            $file = $request->file('foto');
+            $imageName = uploadFile(
+                $request->file('foto'),
+                'sejarah',
+                $sejarah->foto // otomatis hapus lama
+            );
 
-            if ($file && $file->isValid()) {
-
-                $imageName = uploadFile(
-                    $file,
-                    'sejarah',
-                    $sejarah->foto // auto hapus lama
-                );
-
-                if (!$imageName) {
-                    return back()->with('error', 'Gagal upload gambar');
-                }
-
-                $data['foto'] = $imageName;
+            // ❗ jika gagal upload
+            if (!$imageName) {
+                return back()->with('error', 'Gagal upload gambar');
             }
+
+            $data['foto'] = $imageName;
         }
 
+        // ✅ Update ke database
         $sejarah->update($data);
 
         return back()->with('success', 'Sejarah berhasil diperbarui');

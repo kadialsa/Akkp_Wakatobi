@@ -8,8 +8,13 @@ if (!function_exists('uploadFile')) {
     {
         try {
 
-            // ✅ PATH AMAN (tanpa app())
-            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $folder;
+            // ❗ validasi file
+            if (!$file || !$file->isValid()) {
+                return null;
+            }
+
+            // ✅ path Laravel (AMAN)
+            $basePath = public_path('uploads/' . $folder);
 
             // buat folder jika belum ada
             if (!is_dir($basePath)) {
@@ -43,7 +48,7 @@ if (!function_exists('deleteFile')) {
 
             if (!$fileName) return;
 
-            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $folder;
+            $basePath = public_path('uploads/' . $folder);
             $filePath = $basePath . '/' . $fileName;
 
             if (file_exists($filePath)) {
