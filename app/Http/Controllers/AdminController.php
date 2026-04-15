@@ -347,47 +347,42 @@ class AdminController extends Controller
         $sejarah = Sejarah::first();
         return view('Admin.Sejarah', compact('sejarah'));
     }
-    
- public function sejarahUpdate(Request $request)
-{
-    $sejarah = Sejarah::firstOrFail();
+    public function sejarahUpdate(Request $request)
+    {
+        $sejarah = Sejarah::firstOrFail();
 
-    // ✅ Validasi
-    $request->validate([
-        'sejarah' => 'required',
-        'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
+        // ✅ Validasi
+        $request->validate([
+            'sejarah' => 'required',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    // ✅ Sesuaikan dengan nama field database
-    $data = [
-        'description' => $request->sejarah,
-    ];
+        // ✅ SESUAIKAN DENGAN DATABASE
+        $data = [
+            'sejarah' => $request->sejarah,
+        ];
 
-    // 🔥 Upload gambar pakai helper
-    if ($request->hasFile('foto')) {
+        // 🔥 Upload gambar
+        if ($request->hasFile('foto')) {
 
-        $imageName = uploadFile(
-            $request->file('foto'),
-            'sejarah',
-            $sejarah->image // ❗ pakai field DB
-        );
+            $imageName = uploadFile(
+                $request->file('foto'),
+                'sejarah',
+                $sejarah->foto // ✅ field DB
+            );
 
-        // ❗ jika gagal upload
-        if (!$imageName) {
-            return back()->with('error', 'Gagal upload gambar');
+            if (!$imageName) {
+                return back()->with('error', 'Gagal upload gambar');
+            }
+
+            $data['foto'] = $imageName; // ✅ field DB
         }
 
-        $data['image'] = $imageName; // ❗ pakai field DB
+        // ✅ Update
+        $sejarah->update($data);
+
+        return back()->with('success', 'Sejarah berhasil diperbarui');
     }
-
-    // ❌ HAPUS DEBUG INI (biar update jalan)
-    // dd($_SERVER['DOCUMENT_ROOT']);
-
-    // ✅ Update ke database
-    $sejarah->update($data);
-
-    return back()->with('success', 'Sejarah berhasil diperbarui');
-}
 
     // Tugas Pokok Dan Fungsi
     public function tupoksiEdit()
