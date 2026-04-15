@@ -14,7 +14,7 @@ if (!function_exists('uploadFile')) {
             }
 
             // ✅ path Laravel (AMAN)
-            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/profil/uploads/' . $folder;
+            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $folder;
 
             // buat folder jika belum ada
             if (!is_dir($basePath)) {
