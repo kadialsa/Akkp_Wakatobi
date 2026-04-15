@@ -14,7 +14,7 @@ if (!function_exists('uploadFile')) {
             }
 
             // ✅ path Laravel (AMAN)
-            $basePath = public_path('uploads/' . $folder);
+            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/profil/uploads/' . $folder;
 
             // buat folder jika belum ada
             if (!is_dir($basePath)) {
@@ -33,7 +33,6 @@ if (!function_exists('uploadFile')) {
             $file->move($basePath, $fileName);
 
             return $fileName;
-
         } catch (\Throwable $e) {
             return null;
         }
@@ -54,7 +53,6 @@ if (!function_exists('deleteFile')) {
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
-
         } catch (\Throwable $e) {
             // optional
         }
