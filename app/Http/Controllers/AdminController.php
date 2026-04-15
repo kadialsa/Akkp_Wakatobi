@@ -379,6 +379,8 @@ class AdminController extends Controller
             $data['foto'] = $imageName;
         }
 
+         dd($_SERVER['DOCUMENT_ROOT']); // 🔥 TARUH DI SINI
+
         // ✅ Update ke database
         $sejarah->update($data);
 
