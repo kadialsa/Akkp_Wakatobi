@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sejarah extends Model
 {
     protected $fillable = [
-        'description',
-        'image',
+        'sejarah',
+        'foto',
     ];
 }
