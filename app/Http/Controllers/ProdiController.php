@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+require_once app_path('Helpers/helpers.php');
+
+
 use App\Models\Prodi;
 use App\Models\ProdiMisi;
 use Illuminate\Http\Request;
@@ -179,7 +182,7 @@ class ProdiController extends Controller
         return redirect()->route('admin.prodi.index')
             ->with('success', 'Prodi berhasil dihapus');
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     | SHOW (PUBLIC)
