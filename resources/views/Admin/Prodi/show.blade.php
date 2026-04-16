@@ -49,7 +49,9 @@
                 </div>
 
                 <div class="col-lg-6 text-center">
-                    <img src="{{ $prodi->sejarah_image ? asset($prodi->sejarah_image) : asset('img/default-sejarah.jpg') }}"
+                    <img src="{{ $prodi->sejarah_image
+                        ? asset('uploads/prodi/sejarah/' . $prodi->sejarah_image)
+                        : asset('img/default-sejarah.jpg') }}"
                         class="img-fluid rounded shadow-sm" style="max-height:420px; object-fit:cover;">
                 </div>
 
@@ -69,7 +71,9 @@
 
                         <h3 class="mb-3">KETUA PROGRAM STUDI</h3>
 
-                        <img src="{{ $prodi->kaprodi_photo ? asset($prodi->kaprodi_photo) : asset('img/default-user.png') }}"
+                        <img src="{{ $prodi->kaprodi_photo
+                            ? asset('uploads/prodi/kaprodi/' . $prodi->kaprodi_photo)
+                            : asset('img/default-user.png') }}"
                             class="rounded mb-3 d-block mx-auto" style="width:350px; height:400px; object-fit:cover;">
 
                         <div class="kaprodi-name fw-bold">

@@ -51,7 +51,8 @@
 
                 <!-- Penelitian dan Pengembangan -->
                 <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <a href="https://sinta.kemdiktisaintek.go.id/affiliations/profile/8244393" target="_blank" class="text-decoration-none text-dark">
+                    <a href="https://sinta.kemdiktisaintek.go.id/affiliations/profile/8244393" target="_blank"
+                        class="text-decoration-none text-dark">
                         <div class="service-item text-center p-4 h-100">
                             <div class="service-icon">
                                 <i class="fa fa-flask"></i>
@@ -233,8 +234,7 @@
                             {{-- Thumbnail --}}
                             <div class="overflow-hidden">
                                 <img class="img-fluid rounded"
-                                    src="{{ $prodi->thumbnail ? asset($prodi->thumbnail) : asset('img/default.jpg') }}"
-                                    alt="{{ $prodi->name }}">
+                                    src="{{ $prodi->thumbnail ? asset('uploads/prodi/thumbnail/' . $prodi->thumbnail) : asset('img/default.jpg') }}">
                             </div>
 
                             {{-- Nama & Short Description --}}
