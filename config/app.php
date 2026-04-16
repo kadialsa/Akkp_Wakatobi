@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'AKKP WAKATOBI'),
+    'name' => env('APP_NAME', 'Akademi Komunitas Kelautan dan Perikanan Wakatobi'),
 
     /*
     |--------------------------------------------------------------------------
