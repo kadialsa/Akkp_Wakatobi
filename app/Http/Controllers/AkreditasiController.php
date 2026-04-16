@@ -202,6 +202,9 @@ class AkreditasiController extends Controller
             $data['file'] = 'uploads/akreditas/fileakreditas/' . $name;
         }
 
+
+        dd(public_path('uploads/akreditas/imgakreditas'));
+        
         // ===============================
         // UPDATE DATABASE
         // ===============================
