@@ -660,19 +660,19 @@ class AdminController extends Controller
         // slug otomatis
         $data['slug'] = Str::slug($request->title);
 
-        // ringkasan otomatis dari isi berita
+        // excerpt otomatis
         $data['excerpt'] = Str::limit(strip_tags($request->content), 150);
 
-        // simpan user_id dari admin login
+        // user login
         $data['user_id'] = Auth::id();
 
-        // upload gambar
+        // upload image pakai helper
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/beritas'), $filename);
+            $fileName = uploadFile($request->file('image'), 'beritas');
 
-            $data['image'] = 'uploads/beritas/' . $filename;
+            if ($fileName) {
+                $data['image'] = 'uploads/beritas/' . $fileName;
+            }
         }
 
         Berita::create($data);
@@ -704,24 +704,24 @@ class AdminController extends Controller
 
         $data = $request->except(['_token', '_method', 'user_id']);
 
-        // update slug
+        // slug update
         $data['slug'] = Str::slug($request->title);
 
-        // update excerpt otomatis
+        // excerpt update
         $data['excerpt'] = Str::limit(strip_tags($request->content), 150);
 
-        // upload gambar baru
+        // upload image baru pakai helper + hapus lama otomatis
         if ($request->hasFile('image')) {
 
-            if ($berita->image && file_exists(public_path($berita->image))) {
-                unlink(public_path($berita->image));
+            $fileName = uploadFile(
+                $request->file('image'),
+                'beritas',
+                basename($berita->image) // ambil nama file lama
+            );
+
+            if ($fileName) {
+                $data['image'] = 'uploads/beritas/' . $fileName;
             }
-
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/beritas'), $filename);
-
-            $data['image'] = 'uploads/beritas/' . $filename;
         }
 
         $berita->update($data);
@@ -740,8 +740,9 @@ class AdminController extends Controller
     {
         $berita = Berita::findOrFail($id);
 
-        if ($berita->image && file_exists(public_path($berita->image))) {
-            unlink(public_path($berita->image));
+        // hapus file pakai helper
+        if ($berita->image) {
+            deleteFile(basename($berita->image), 'beritas');
         }
 
         $berita->delete();
