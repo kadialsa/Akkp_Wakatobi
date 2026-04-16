@@ -85,7 +85,7 @@
                     @if ($prodi->sejarah_image)
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Gambar Saat Ini</label><br>
-                            <img src="{{ asset($prodi->sejarah_image) }}" width="150" class="rounded border">
+                            <img src="{{ asset('uploads/prodi/sejarah/' . $prodi->sejarah_image) }}" width="150" class="rounded border">
                         </div>
                     @endif
 
@@ -94,7 +94,6 @@
 
                         <input type="file" name="sejarah_image" class="form-control" accept=".jpg,.jpeg,.png"
                             onchange="validateFile(this); previewImage(event,'previewSejarah')">
-
                         <small class="text-muted">
                             Ukuran disarankan: 1400x760px | Format: JPG/PNG | Maksimal 2MB
                         </small>
@@ -238,7 +237,7 @@
                     @if ($prodi->kaprodi_photo)
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Foto Saat Ini</label><br>
-                            <img src="{{ asset($prodi->kaprodi_photo) }}" width="150" class="rounded border">
+                            <img src="{{ asset('uploads/prodi/kaprodi/' . $prodi->kaprodi_photo) }}" width="150" class="rounded border">
                         </div>
                     @endif
 

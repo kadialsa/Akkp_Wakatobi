@@ -38,7 +38,7 @@
                                     {{-- Thumbnail --}}
                                     <td>
                                         @if ($prodi->thumbnail)
-                                            <img src="{{ asset($prodi->thumbnail) }}"
+                                            <img src="{{ asset('uploads/prodi/thumbnail/' . $prodi->thumbnail) }}"
                                                 style="width:80px;height:60px;object-fit:cover;border-radius:6px;">
                                         @else
                                             <span class="text-muted">No Image</span>
