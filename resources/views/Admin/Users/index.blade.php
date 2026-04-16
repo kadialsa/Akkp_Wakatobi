@@ -22,7 +22,7 @@
             <div class="card-body">
 
                 <div class="table-responsive">
-                    <table class="table align-middle table-hover">
+                    <table class="table table-bordered table-hover align-middle text-center">
                         <thead class="table-light">
                             <tr>
                                 <th width="60">No</th>
@@ -52,33 +52,32 @@
                                     </td>
 
                                     <!-- Aksi -->
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center flex-nowrap">
+                                    <td style="white-space: nowrap; text-align:center;">
 
-                                            <!-- View -->
-                                            <a href="{{ route('admin.users.show', $admin->id) }}"
-                                                class="btn btn-sm btn-info me-2">
-                                                View
-                                            </a>
+                                        <!-- View -->
+                                        <a href="{{ route('admin.users.show', $admin->id) }}" class="btn btn-info btn-sm"
+                                            style="margin-right:1px;">
+                                            View
+                                        </a>
 
-                                            <!-- Edit -->
-                                            <a href="{{ route('admin.users.edit', $admin->id) }}"
-                                                class="btn btn-sm btn-warning me-2">
-                                                Edit
-                                            </a>
+                                        <!-- Edit -->
+                                        <a href="{{ route('admin.users.edit', $admin->id) }}" class="btn btn-warning btn-sm"
+                                            style="margin-right:1px;">
+                                            Edit
+                                        </a>
 
-                                            <!-- Hapus -->
-                                            <form action="{{ route('admin.users.delete', $admin->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Yakin ingin menghapus admin ini?')">
-                                                    Hapus
-                                                </button>
-                                            </form>
+                                        <!-- Hapus -->
+                                        <form action="{{ route('admin.users.delete', $admin->id) }}" method="POST"
+                                            style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
 
-                                        </div>
+                                            <button class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Yakin ingin menghapus admin ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+
                                     </td>
 
                                 </tr>
