@@ -93,14 +93,14 @@ Route::middleware(['authadmin'])->prefix('admin')->name('admin.')->group(functio
     Route::put('/cooperation/{cooperation}', [AdminController::class, 'cooperation_update'])->name('cooperation.update');
     Route::delete('/cooperation/{cooperation}', [AdminController::class, 'cooperation_destroy'])->name('cooperation.destroy');
 
-    // leader
+    // leader / struktur organisasi
     Route::get('/leader/create/{section}', [AdminController::class, 'leader_create'])->name('leader.create');
     Route::post('/leader', [AdminController::class, 'leader_Store'])->name('leader.store');
     Route::get('/leader/{leader}/edit', [AdminController::class, 'leader_edit'])->name('leader.edit');
     Route::put('/leader/{leader}', [AdminController::class, 'leader_Update'])->name('leader.update');
     Route::delete('/leader/{leader}', [AdminController::class, 'leader_Destroy'])->name('leader.destroy');
 
-    // Section
+    // Section / struktur organisasi
     Route::get('/sections', [AdminController::class, 'section_index'])->name('section.index');
     Route::get('/section/create', [AdminController::class, 'section_create'])->name('section.create');
     Route::post('/section', [AdminController::class, 'section_store'])->name('section.store');

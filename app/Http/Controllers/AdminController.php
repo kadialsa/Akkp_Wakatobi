@@ -453,6 +453,8 @@ class AdminController extends Controller
         return back()->with('success', 'Struktur organisasi berhasil diperbarui');
     }
 
+    // Section struktur organisasi
+
     public function section_index()
     {
         $sections = Section::with('leaders')->get();
@@ -507,37 +509,41 @@ class AdminController extends Controller
             ->with('success', 'Section berhasil dihapus');
     }
 
-    // leader
-
+    // leader Struktur organisai
     public function leader_create(Section $section)
     {
         return view('Admin.Sections.leader-create', compact('section'));
     }
 
-    public function leader_Store(Request $request)
+    public function leader_store(Request $request)
     {
         $request->validate([
             'section_id' => 'required|exists:sections,id',
-            'position' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'degree' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
+            'position'   => 'required|string|max:255',
+            'name'       => 'required|string|max:255',
+            'degree'     => 'nullable|string|max:255',
+            'photo'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         $imageName = null;
 
         if ($request->hasFile('photo')) {
-            $imageName = time() . '.' . $request->photo->extension();
-            $request->photo->move(public_path('uploads/leaders'), $imageName);
-        }
+            $imageName = uploadFile(
+                $request->file('photo'),
+                'leaders'
+            );
 
+            if (!$imageName) {
+                return back()->with('error', 'Gagal upload gambar')->withInput();
+            }
+        }
 
         Leader::create([
             'section_id' => $request->section_id,
-            'position' => $request->position,
-            'name' => $request->name,
-            'degree' => $request->degree,
-            'photo' => $imageName
+            'position'   => $request->position,
+            'name'       => $request->name,
+            'degree'     => $request->degree,
+            'photo'      => $imageName
         ]);
 
         return redirect()->route('admin.section.index')
@@ -549,71 +555,63 @@ class AdminController extends Controller
         return view('Admin.Sections.leader-edit', compact('leader'));
     }
 
-
     public function leader_update(Request $request, Leader $leader)
     {
-        // Validasi dasar dulu
         $request->validate([
             'position' => 'required|string|max:255',
             'name'     => 'required|string|max:255',
             'degree'   => 'nullable|string|max:255',
             'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ], [
-            'position.required' => 'Jabatan wajib diisi.',
-            'name.required'     => 'Nama wajib diisi.',
-            'photo.image'       => 'File harus berupa gambar.',
-            'photo.mimes'       => 'Format gambar harus JPG atau PNG.',
-            'photo.max'         => 'Ukuran gambar maksimal 2MB.',
         ]);
 
-        // Validasi tambahan untuk rasio & ukuran
+        // 🔥 VALIDASI TAMBAHAN
         if ($request->hasFile('photo')) {
 
             $file = $request->file('photo');
-            [$width, $height] = getimagesize($file);
+            [$width, $height] = getimagesize($file->getPathname());
 
-            // Cek minimal ukuran
             if ($width < 400 || $height < 600) {
-                return back()
-                    ->withErrors(['photo' => 'Ukuran minimal gambar adalah 400x600 px.'])
-                    ->withInput();
+                return back()->withErrors([
+                    'photo' => 'Ukuran minimal gambar adalah 400x600 px.'
+                ])->withInput();
             }
 
-            // Cek rasio 2:3 (cross multiply supaya stabil)
             if ($width * 3 !== $height * 2) {
-                return back()
-                    ->withErrors(['photo' => 'Rasio gambar harus 2:3 (contoh 400x600 atau 600x900).'])
-                    ->withInput();
+                return back()->withErrors([
+                    'photo' => 'Rasio gambar harus 2:3 (contoh 400x600 atau 600x900).'
+                ])->withInput();
             }
         }
 
-        // Update data teks
-        $leader->position = $request->position;
-        $leader->name     = $request->name;
-        $leader->degree   = $request->degree;
+        // ✅ Update data
+        $leader->update([
+            'position' => $request->position,
+            'name'     => $request->name,
+            'degree'   => $request->degree,
+        ]);
 
-        // Upload foto baru jika ada
+        // 🔥 Upload pakai helper
         if ($request->hasFile('photo')) {
 
-            // Hapus foto lama
-            if ($leader->photo && File::exists(public_path('uploads/leaders/' . $leader->photo))) {
-                File::delete(public_path('uploads/leaders/' . $leader->photo));
+            $imageName = uploadFile(
+                $request->file('photo'),
+                'leaders',
+                $leader->photo // auto hapus lama
+            );
+
+            if (!$imageName) {
+                return back()->with('error', 'Gagal upload gambar')->withInput();
             }
 
-            $file = $request->file('photo');
-            $imageName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/leaders'), $imageName);
-
-            $leader->photo = $imageName;
+            $leader->update([
+                'photo' => $imageName
+            ]);
         }
-
-        $leader->save();
 
         return redirect()
             ->route('admin.section.index')
             ->with('success', 'Data pimpinan berhasil diperbarui.');
     }
-
 
     public function leader_destroy(Leader $leader)
     {
