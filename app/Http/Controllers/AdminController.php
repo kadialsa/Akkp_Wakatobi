@@ -421,30 +421,34 @@ class AdminController extends Controller
     public function strukturUpdate(Request $request)
     {
         $request->validate([
-            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        // ambil data pertama, jika tidak ada return error
+        // ambil data pertama
         $struktur = StrukturOrganisasi::first();
+
         if (!$struktur) {
             return back()->with('error', 'Data struktur organisasi belum tersedia.');
-            // atau bisa redirect ke halaman lain sesuai kebutuhan
         }
 
+        // 🔥 Upload pakai helper
         if ($request->hasFile('image')) {
 
-            // hapus gambar lama jika ada
-            if ($struktur->image && file_exists(public_path('uploads/struktur/' . $struktur->image))) {
-                unlink(public_path('uploads/struktur/' . $struktur->image));
-            }
+            $imageName = uploadFile(
+                $request->file('image'),
+                'struktur',
+                $struktur->image // otomatis hapus lama
+            );
 
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('uploads/struktur'), $imageName);
+            if (!$imageName) {
+                return back()->with('error', 'Gagal upload gambar');
+            }
 
             $struktur->image = $imageName;
         }
 
-        $struktur->save(); // update data
+        // ✅ simpan
+        $struktur->save();
 
         return back()->with('success', 'Struktur organisasi berhasil diperbarui');
     }
