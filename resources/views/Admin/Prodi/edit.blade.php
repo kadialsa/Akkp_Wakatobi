@@ -42,7 +42,7 @@
 
                         @if ($prodi->thumbnail)
                             <div class="mb-2">
-                                <img src="{{ asset($prodi->thumbnail) }}" width="150" class="rounded border">
+                                <img src="{{ asset('uploads/prodi/thumbnail/' . $prodi->thumbnail) }}" width="150" class="rounded border">
                             </div>
                         @endif
 
