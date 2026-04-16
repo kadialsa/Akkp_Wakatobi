@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+require_once app_path('Helpers/helpers.php');
+
 use App\Models\Akreditasi;
 use Illuminate\Http\Request;
 
@@ -17,7 +19,6 @@ class AkreditasiController extends Controller
 
         return view('Admin.Akreditasi.index', compact('akreditas'));
     }
-
 
     // ===============================
     // FORM CREATE
@@ -57,37 +58,19 @@ class AkreditasiController extends Controller
             'description' => $request->description,
         ];
 
-        // ================= IMAGE =================
+        // ✅ upload image
         if ($request->hasFile('image')) {
-
-            $file = $request->file('image');
-
-            $folder = public_path('uploads/akreditas/imgakreditas');
-            if (!file_exists($folder)) {
-                mkdir($folder, 0755, true);
-            }
-
-            $name = uniqid() . '.' . $file->getClientOriginalExtension();
-
-            if ($file->move($folder, $name)) {
-                $data['image'] = 'uploads/akreditas/imgakreditas/' . $name;
+            $fileName = uploadFile($request->file('image'), 'akreditas/imgakreditas');
+            if ($fileName) {
+                $data['image'] = 'uploads/akreditas/imgakreditas/' . $fileName;
             }
         }
 
-        // ================= FILE =================
+        // ✅ upload file
         if ($request->hasFile('file')) {
-
-            $file = $request->file('file');
-
-            $folder = public_path('uploads/akreditas/fileakreditas');
-            if (!file_exists($folder)) {
-                mkdir($folder, 0755, true);
-            }
-
-            $name = uniqid() . '.' . $file->getClientOriginalExtension();
-
-            if ($file->move($folder, $name)) {
-                $data['file'] = 'uploads/akreditas/fileakreditas/' . $name;
+            $fileName = uploadFile($request->file('file'), 'akreditas/fileakreditas');
+            if ($fileName) {
+                $data['file'] = 'uploads/akreditas/fileakreditas/' . $fileName;
             }
         }
 
@@ -96,6 +79,7 @@ class AkreditasiController extends Controller
         return redirect()->route('admin.akreditasi.index')
             ->with('success', 'Akreditasi berhasil ditambahkan');
     }
+
     // ===============================
     // SHOW DETAIL
     // ===============================
@@ -147,45 +131,39 @@ class AkreditasiController extends Controller
             'description' => $request->description,
         ];
 
-        // ================= IMAGE UPDATE =================
+        // ✅ IMAGE
         if ($request->hasFile('image')) {
 
-            if ($akreditasi->image && file_exists(public_path($akreditasi->image))) {
-                unlink(public_path($akreditasi->image));
-            }
+            $oldImage = $akreditasi->image
+                ? basename($akreditasi->image)
+                : null;
 
-            $file = $request->file('image');
+            $fileName = uploadFile(
+                $request->file('image'),
+                'akreditas/imgakreditas',
+                $oldImage
+            );
 
-            $folder = public_path('uploads/akreditas/imgakreditas');
-            if (!file_exists($folder)) {
-                mkdir($folder, 0755, true);
-            }
-
-            $name = uniqid() . '.' . $file->getClientOriginalExtension();
-
-            if ($file->move($folder, $name)) {
-                $data['image'] = 'uploads/akreditas/imgakreditas/' . $name;
+            if ($fileName) {
+                $data['image'] = 'uploads/akreditas/imgakreditas/' . $fileName;
             }
         }
 
-        // ================= FILE UPDATE =================
+        // ✅ FILE
         if ($request->hasFile('file')) {
 
-            if ($akreditasi->file && file_exists(public_path($akreditasi->file))) {
-                unlink(public_path($akreditasi->file));
-            }
+            $oldFile = $akreditasi->file
+                ? basename($akreditasi->file)
+                : null;
 
-            $file = $request->file('file');
+            $fileName = uploadFile(
+                $request->file('file'),
+                'akreditas/fileakreditas',
+                $oldFile
+            );
 
-            $folder = public_path('uploads/akreditas/fileakreditas');
-            if (!file_exists($folder)) {
-                mkdir($folder, 0755, true);
-            }
-
-            $name = uniqid() . '.' . $file->getClientOriginalExtension();
-
-            if ($file->move($folder, $name)) {
-                $data['file'] = 'uploads/akreditas/fileakreditas/' . $name;
+            if ($fileName) {
+                $data['file'] = 'uploads/akreditas/fileakreditas/' . $fileName;
             }
         }
 
@@ -195,7 +173,6 @@ class AkreditasiController extends Controller
             ->with('success', 'Data berhasil diperbarui');
     }
 
-
     // ===============================
     // DELETE
     // ===============================
@@ -203,12 +180,12 @@ class AkreditasiController extends Controller
     {
         $item = Akreditasi::findOrFail($id);
 
-        if ($item->image && file_exists(public_path($item->image))) {
-            unlink(public_path($item->image));
+        if ($item->image) {
+            deleteFile(basename($item->image), 'akreditas/imgakreditas');
         }
 
-        if ($item->file && file_exists(public_path($item->file))) {
-            unlink(public_path($item->file));
+        if ($item->file) {
+            deleteFile(basename($item->file), 'akreditas/fileakreditas');
         }
 
         $item->delete();
