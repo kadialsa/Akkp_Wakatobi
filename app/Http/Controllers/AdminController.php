@@ -879,31 +879,27 @@ class AdminController extends Controller
         return view('Admin.Header', compact('header'));
     }
 
-
-    // Update Header
     public function headerUpdate(Request $request)
     {
         $request->validate([
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        // Ambil header pertama saja (tidak buat baru)
         $header = HeaderSetting::firstOrFail();
 
         if ($request->hasFile('image')) {
 
-            // Hapus gambar lama
-            if ($header->image && file_exists(public_path('uploads/header/' . $header->image))) {
-                unlink(public_path('uploads/header/' . $header->image));
+            // hapus file lama pakai helper
+            if ($header->image) {
+                deleteFile($header->image, 'header');
             }
 
-            $file = $request->file('image');
+            // upload file baru pakai helper
+            $fileName = uploadFile($request->file('image'), 'header');
 
-            $namaFile = time() . '.' . $file->getClientOriginalExtension();
-
-            $file->move(public_path('uploads/header'), $namaFile);
-
-            $header->image = $namaFile;
+            if ($fileName) {
+                $header->image = $fileName;
+            }
         }
 
         $header->save();
