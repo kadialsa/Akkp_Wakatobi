@@ -47,7 +47,7 @@
                                     onchange="previewImage(this)">
 
                                 <small class="text-muted">
-                                 Ukuran Gambar 1600 x 900 px | Format JPG / PNG | maksimal 2MB
+                                    Ukuran Gambar 1600 x 900 px | Format JPG / PNG | maksimal 2MB
                                 </small>
                             </div>
 
@@ -77,12 +77,13 @@
                             <div class="text-center mb-4">
                                 <small id="imageSize" class="text-muted">
 
-                                    @if ($struktur && $struktur->image)
+                                    @php
+                                        $path = $_SERVER['DOCUMENT_ROOT'] . '/uploads/struktur/' . $struktur->image;
+                                    @endphp
+
+                                    @if ($struktur && $struktur->image && file_exists($path))
                                         Ukuran gambar:
-                                        {{ getimagesize(public_path('uploads/struktur/' . $struktur->image))[0] }}
-                                        x
-                                        {{ getimagesize(public_path('uploads/struktur/' . $struktur->image))[1] }}
-                                        px
+                                        {{ getimagesize($path)[0] }} x {{ getimagesize($path)[1] }} px
                                     @else
                                         Pilih gambar untuk melihat ukuran
                                     @endif
