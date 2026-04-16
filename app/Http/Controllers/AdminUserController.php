@@ -32,7 +32,7 @@ class AdminUserController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('admin.users.index', compact('admins'));
+        return view('Admin.Users.index', compact('admins'));
     }
 
 
@@ -40,7 +40,7 @@ class AdminUserController extends Controller
 
     public function create()
     {
-        return view('admin.users.create');
+        return view('Admin.Users.create');
     }
 
 
@@ -78,7 +78,7 @@ class AdminUserController extends Controller
     {
         $admin = User::findOrFail($id);
 
-        return view('admin.users.show', compact('admin'));
+        return view('Admin.Users.show', compact('admin'));
     }
 
 
@@ -88,7 +88,7 @@ class AdminUserController extends Controller
     {
         $admin = User::findOrFail($id);
 
-        return view('admin.users.edit', compact('admin'));
+        return view('Admin.Users.edit', compact('admin'));
     }
 
 
