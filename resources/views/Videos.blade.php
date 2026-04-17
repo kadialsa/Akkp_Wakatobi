@@ -10,7 +10,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" href="#">Viedo Terkait</a>
+                            <li class="breadcrumb-item"><a class="text-white" href="#">Video Terkait</a>
                             </li>
                         </ol>
                     </nav>

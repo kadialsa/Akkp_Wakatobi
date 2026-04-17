@@ -7,7 +7,7 @@
         <div class="row mb-5">
             <div class="col text-center">
                 <h1 class="fw-bold text-title-dark">
-                   cek halaman  BERITA AKKP WAKATOBI
+                   BERITA AKKP WAKATOBI
                 </h1>
 
                 <p class="text-muted">

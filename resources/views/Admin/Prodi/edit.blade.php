@@ -50,7 +50,7 @@
                             onchange="validateFile(this); previewImage(event,'previewThumbnail')">
 
                         <small class="text-muted">
-                            Ukuran disarankan: 800x600px | Format: JPG/PNG | Maksimal 2MB
+                            Ukuran disarankan: 500x500px | Format: JPG/PNG | Maksimal 2MB
                         </small>
 
                         <img id="previewThumbnail" class="img-fluid rounded d-none mt-2" width="200">
