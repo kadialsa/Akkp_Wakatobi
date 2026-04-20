@@ -12,7 +12,7 @@
                             <li class="breadcrumb-item">
                                 <a class="text-white" href="{{ url('/') }}">Home</a>
                             </li>
-                            <li class="breadcrumb-item text-white active">Contak</li>
+                            <li class="breadcrumb-item text-white active">Contact</li>
                         </ol>
                     </nav>
                 </div>
