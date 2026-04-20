@@ -742,20 +742,24 @@ class AdminController extends Controller
 
             $file = $request->file('upload');
 
+            // nama file unik & aman
             $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
 
-            // 🔥 SIMPAN KE PROFIL
-            $path = public_path('profil/uploads/beritas');
+            // 🔥 PATH (TANPA /profil)
+            $path = public_path('uploads/beritas');
 
+            // buat folder jika belum ada
             if (!file_exists($path)) {
                 mkdir($path, 0755, true);
             }
 
+            // simpan file
             $file->move($path, $filename);
 
-            // 🔥 URL WAJIB PROFIL
-            $url = asset('profil/uploads/beritas/' . $filename);
+            // 🔥 URL (TANPA /profil)
+            $url = asset('uploads/beritas/' . $filename);
 
+            // ambil callback CKEditor
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
 
             return response("
@@ -767,7 +771,7 @@ class AdminController extends Controller
 
         return response("
         <script>
-            alert('Upload gagal!');
+            window.parent.CKEDITOR.tools.callFunction(0, '', 'Upload gagal!');
         </script>
     ");
     }
