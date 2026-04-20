@@ -94,12 +94,13 @@
 
                                 <p class="footer-text">
                                     <i class="fa fa-map-marker-alt me-2"></i>
-                                    Jalan Soekarno Hatta, Matahora, Wakatobi
+                                    Jalan Soekarno Hatta, Desa Matahora, Kecamatan Wangi-Wangi Selatan, Kabupaten
+                                    Wakatobi Sulawesi Tenggara 97395
                                 </p>
 
                                 <p class="footer-text">
                                     <i class="fa fa-phone-alt me-2"></i>
-                                    +62 xxx xxxx xxxx
+                                    (0404) 21362
                                 </p>
 
                                 <p class="footer-text">
