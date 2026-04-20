@@ -735,6 +735,39 @@ class AdminController extends Controller
         $berita = Berita::findOrFail($id);
         return view('Admin.Berita.show', compact('berita'));
     }
+    
+    public function uploadCkeditor(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+
+            $file = $request->file('upload');
+
+            // nama file unik
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // simpan ke folder public
+            $file->move(public_path('uploads/beritas'), $filename);
+
+            // url akses
+            $url = asset('uploads/beritas/' . $filename);
+
+            // ambil funcNum dari CKEditor
+            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+
+            // response wajib (format JS)
+            return response("
+            <script>
+                window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', 'Upload berhasil');
+            </script>
+        ");
+        }
+
+        return response("
+        <script>
+            alert('Upload gagal!');
+        </script>
+    ");
+    }
 
     public function beritaDestroy($id)
     {

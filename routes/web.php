@@ -123,6 +123,10 @@ Route::middleware(['authadmin'])->prefix('admin')->name('admin.')->group(functio
     Route::delete('/berita/delete/{id}', [AdminController::class, 'beritaDestroy'])->name('berita.delete');
     Route::get('/berita/show/{id}', [AdminController::class, 'beritaShow'])->name('berita.show');
 
+     Route::post('upload-ckeditor', [AdminController::class, 'uploadCkeditor'])
+        ->name('upload.ckeditor');
+
+
     // Contact admin
     Route::get('/contact', [ContactController::class, 'contactIndex'])->name('contact.index');
     Route::get('/contact/{id}', [ContactController::class, 'contactShow'])->name('contact.show');
