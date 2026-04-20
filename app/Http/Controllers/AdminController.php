@@ -704,19 +704,52 @@ class AdminController extends Controller
 
         $data = $request->except(['_token', '_method', 'user_id']);
 
-        // slug update
-        $data['slug'] = Str::slug($request->title);
+        // ===============================
+        // 🔥 AMBIL GAMBAR LAMA (CKEDITOR)
+        // ===============================
+        preg_match_all('/<img[^>]+src="([^">]+)"/', $berita->content, $oldImages);
+        $oldImages = $oldImages[1] ?? [];
 
-        // excerpt update
+        // ===============================
+        // 🔥 AMBIL GAMBAR BARU
+        // ===============================
+        preg_match_all('/<img[^>]+src="([^">]+)"/', $request->content, $newImages);
+        $newImages = $newImages[1] ?? [];
+
+        // ===============================
+        // 🔥 HAPUS GAMBAR YANG SUDAH TIDAK DIPAKAI
+        // ===============================
+        $deletedImages = array_diff($oldImages, $newImages);
+
+        foreach ($deletedImages as $imgUrl) {
+
+            // hanya hapus gambar dari folder kita
+            if (str_contains($imgUrl, '/uploads/beritas/')) {
+
+                $path = parse_url($imgUrl, PHP_URL_PATH);
+                $fullPath = public_path($path);
+
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
+        }
+
+        // ===============================
+        // UPDATE DATA
+        // ===============================
+        $data['slug'] = Str::slug($request->title);
         $data['excerpt'] = Str::limit(strip_tags($request->content), 150);
 
-        // upload image baru pakai helper + hapus lama otomatis
+        // ===============================
+        // 🔥 UPDATE GAMBAR UTAMA
+        // ===============================
         if ($request->hasFile('image')) {
 
             $fileName = uploadFile(
                 $request->file('image'),
                 'beritas',
-                basename($berita->image) // ambil nama file lama
+                basename($berita->image)
             );
 
             if ($fileName) {
@@ -778,11 +811,38 @@ class AdminController extends Controller
     {
         $berita = Berita::findOrFail($id);
 
-        // hapus file pakai helper
+        // ===============================
+        // 🔥 HAPUS SEMUA GAMBAR CKEDITOR
+        // ===============================
+        if ($berita->content) {
+
+            preg_match_all('/<img[^>]+src="([^">]+)"/', $berita->content, $images);
+            $images = $images[1] ?? [];
+
+            foreach ($images as $imgUrl) {
+
+                if (str_contains($imgUrl, '/uploads/beritas/')) {
+
+                    $path = parse_url($imgUrl, PHP_URL_PATH);
+                    $fullPath = public_path($path);
+
+                    if (file_exists($fullPath)) {
+                        unlink($fullPath);
+                    }
+                }
+            }
+        }
+
+        // ===============================
+        // 🔥 HAPUS GAMBAR UTAMA
+        // ===============================
         if ($berita->image) {
             deleteFile(basename($berita->image), 'beritas');
         }
 
+        // ===============================
+        // HAPUS DATA
+        // ===============================
         $berita->delete();
 
         return back()->with('success', 'Berita berhasil dihapus');
