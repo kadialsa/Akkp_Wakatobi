@@ -1719,3 +1719,17 @@ body {
 .visimisi-section .content-list li{
     margin-bottom: 8px;
 }
+
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px; /* penting supaya tidak ketarik */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-icon i {
+    font-size: 20px;
+    display: inline-block;
+}

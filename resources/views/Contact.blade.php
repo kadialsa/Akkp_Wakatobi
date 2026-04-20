@@ -56,13 +56,13 @@
                     </p>
 
                     <div class="d-flex align-items-center mb-3">
-                        <div class="bg-primary text-white d-flex align-items-center justify-content-center"
-                            style="width:50px;height:50px;">
+                        <div class="bg-primary text-white d-flex align-items-center justify-content-center contact-icon">
                             <i class="fa fa-map-marker-alt"></i>
                         </div>
                         <div class="ms-3">
                             <h5 class="text-primary">Alamat</h5>
-                            <p class="mb-0">AKKP Wakatobi, Sulawesi Tenggara</p>
+                            <p class="mb-0">Jalan Soekarno Hatta, Desa Matahora, Kecamatan Wangi-Wangi Selatan, Kabupaten
+                                Wakatobi Sulawesi Tenggara 97395</p>
                         </div>
                     </div>
 
@@ -73,7 +73,7 @@
                         </div>
                         <div class="ms-3">
                             <h5 class="text-primary">Telepon</h5>
-                            <p class="mb-0">-</p>
+                            <p class="mb-0">(0404) 21362</p>
                         </div>
                     </div>
 
