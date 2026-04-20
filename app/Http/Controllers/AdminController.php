@@ -736,48 +736,41 @@ class AdminController extends Controller
         return view('Admin.Berita.show', compact('berita'));
     }
 
-  public function uploadCkeditor(Request $request)
-{
-    if ($request->hasFile('upload')) {
+    public function uploadCkeditor(Request $request)
+    {
+        if ($request->hasFile('upload')) {
 
-        $file = $request->file('upload');
-        $filename = time().'_'.str_replace(' ', '_', $file->getClientOriginalName());
+            $file = $request->file('upload');
 
-        // 🔥 AUTO DETECT ENVIRONMENT
-        if (app()->environment('local')) {
-            $path = public_path('uploads/beritas');
-            $urlPath = 'uploads/beritas';
-        } else {
+            $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+
+            // 🔥 SIMPAN KE PROFIL
             $path = public_path('profil/uploads/beritas');
-            $urlPath = 'profil/uploads/beritas';
-        }
 
-        // buat folder jika belum ada
-        if (!file_exists($path)) {
-            mkdir($path, 0755, true);
-        }
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
 
-        // simpan file
-        $file->move($path, $filename);
+            $file->move($path, $filename);
 
-        // url
-        $url = asset($urlPath.'/'.$filename);
+            // 🔥 URL WAJIB PROFIL
+            $url = asset('profil/uploads/beritas/' . $filename);
 
-        $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
 
-        return response("
+            return response("
             <script>
                 window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', 'Upload berhasil');
             </script>
         ");
-    }
+        }
 
-    return response("
+        return response("
         <script>
             alert('Upload gagal!');
         </script>
     ");
-}
+    }
 
     public function beritaDestroy($id)
     {
