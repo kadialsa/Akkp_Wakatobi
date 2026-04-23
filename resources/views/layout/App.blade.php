@@ -13,7 +13,7 @@
 
         <!-- Favicon -->
         <link href="{{ asset('img/logo.png') }}" rel="icon">
-        
+
 
         <!-- Google Web Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -158,8 +158,8 @@
                 <!-- COPYRIGHT -->
                 <div class="border-top border-secondary mt-5 pt-4 text-center small">
 
-                    © {{ date('Y') }}
-                    <strong>AKKP Wakatobi</strong>. All Rights Reserved
+                    {{-- © {{ date('Y') }} --}}
+                    <strong>© 2018 AKKP Wakatobi</strong>. All Rights Reserved
 
                 </div>
 

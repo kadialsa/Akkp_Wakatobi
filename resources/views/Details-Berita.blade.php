@@ -38,8 +38,8 @@
 
                 &nbsp;&nbsp;|&nbsp;&nbsp;
 
-                <i class="bi bi-person"></i>
-                {{ optional($berita->user)->name ?? 'Admin' }}
+                {{-- <i class="bi bi-person"></i>
+                {{ optional($berita->user)->name ?? 'Admin' }} --}}
 
                 &nbsp;&nbsp;|&nbsp;&nbsp;
 
