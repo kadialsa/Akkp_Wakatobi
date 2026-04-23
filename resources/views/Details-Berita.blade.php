@@ -36,8 +36,6 @@
                     ? \Carbon\Carbon::parse($berita->published_at)->translatedFormat('d F Y')
                     : '-' }}
 
-                &nbsp;&nbsp;|&nbsp;&nbsp;
-
                 {{-- <i class="bi bi-person"></i>
                 {{ optional($berita->user)->name ?? 'Admin' }} --}}
 
