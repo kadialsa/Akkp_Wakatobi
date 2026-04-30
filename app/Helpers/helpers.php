@@ -2,40 +2,34 @@
 
 use Illuminate\Support\Str;
 
-if (!function_exists('uploadFile')) {
+function uploadFile($file, $folder, $oldFile = null)
+{
+    try {
 
-    function uploadFile($file, $folder, $oldFile = null)
-    {
-        try {
-
-            // ❗ validasi file
-            if (!$file || !$file->isValid()) {
-                return null;
-            }
-
-            // ✅ path Laravel (AMAN)
-            $basePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $folder;
-
-            // buat folder jika belum ada
-            if (!is_dir($basePath)) {
-                mkdir($basePath, 0755, true);
-            }
-
-            // hapus file lama
-            if ($oldFile && file_exists($basePath . '/' . $oldFile)) {
-                unlink($basePath . '/' . $oldFile);
-            }
-
-            // nama file unik
-            $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-
-            // upload file
-            $file->move($basePath, $fileName);
-
-            return $fileName;
-        } catch (\Throwable $e) {
+        if (!$file || !$file->isValid()) {
             return null;
         }
+
+        // ✅ gunakan ini
+        $basePath = $_SERVER['DOCUMENT_ROOT'] . '/profil/uploads/' . $folder;
+
+        if (!is_dir($basePath)) {
+            mkdir($basePath, 0755, true);
+        }
+
+        // hapus file lama
+        if ($oldFile && file_exists($basePath . '/' . $oldFile)) {
+            unlink($basePath . '/' . $oldFile);
+        }
+
+        $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
+
+        $file->move($basePath, $fileName);
+
+        return $fileName;
+
+    } catch (\Throwable $e) {
+        return null;
     }
 }
 
